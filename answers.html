@@ -95,6 +95,20 @@ document.getElementById('c6Marks').textContent = coding6.trim()!=="" ? 40 : 0;
 
 const total = Math.round(mcqScore) + parseInt(document.getElementById('b4Marks').textContent) + parseInt(document.getElementById('b5Marks').textContent) + parseInt(document.getElementById('c6Marks').textContent);
 document.getElementById('totalMarks').textContent = total;
+
+// PDF Download
+document.getElementById('downloadBtn').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
+    html2canvas(document.getElementById('answerSheet')).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const imgWidth = pageWidth;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`Exam_Answers_${studentName}.pdf`);
+    });
+});
 </script>
 
 </body>
