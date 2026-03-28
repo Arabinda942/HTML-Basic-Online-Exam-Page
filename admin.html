@@ -1,16 +1,104 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin</title>
+<title>Admin Panel</title>
 
 <style>
-body { font-family: Arial; padding:20px; }
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+    padding:30px;
+}
+
+/* TITLE */
+h1 {
+    text-align:center;
+    margin-bottom:20px;
+}
+
+/* LOGIN BOX */
+#login {
+    max-width:300px;
+    margin:50px auto;
+    background: rgba(255,255,255,0.1);
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+}
+
+#login input {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border:none;
+    border-radius:5px;
+}
+
+#login button {
+    padding:10px;
+    width:100%;
+    background:#00c6ff;
+    border:none;
+    color:#fff;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* PANEL */
 .hidden { display:none; }
 
-table { width:100%; border-collapse:collapse; }
-td, th { border:1px solid #ccc; padding:10px; text-align:center; }
+#panel {
+    background: rgba(255,255,255,0.08);
+    padding:20px;
+    border-radius:15px;
+}
 
-button { padding:5px 10px; cursor:pointer; }
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:#fff;
+    color:#000;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+th {
+    background:#0072ff;
+    color:#fff;
+}
+
+td, th {
+    padding:10px;
+    border:1px solid #ccc;
+    text-align:center;
+}
+
+/* BUTTONS */
+button {
+    padding:6px 10px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    margin:2px;
+}
+
+button:hover {
+    opacity:0.9;
+}
+
+input[type="number"] {
+    width:70px;
+    padding:5px;
+}
 
 /* MODAL */
 .modal {
@@ -27,10 +115,12 @@ button { padding:5px 10px; cursor:pointer; }
 
 .modal-content {
     background:#fff;
+    color:#000;
     padding:20px;
     width:80%;
     max-height:80%;
     overflow:auto;
+    border-radius:10px;
 }
 </style>
 </head>
@@ -72,7 +162,7 @@ button { padding:5px 10px; cursor:pointer; }
 
 </div>
 
-<!-- ANSWER MODAL -->
+<!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modal-content">
     <button onclick="closeModal()">Close</button>
@@ -186,7 +276,6 @@ function downloadPDF(i){
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-
     pdf.text(content, 10, 10);
     pdf.save(`${student.name}_Exam.pdf`);
 }
