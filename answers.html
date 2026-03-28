@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Submitted Answers</title>
+<title>Submission Summary</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -25,22 +25,11 @@ body {
 
 h1 { text-align:center; margin-bottom:20px; }
 
-.info {
-    margin-bottom:20px;
-    font-size:16px;
-}
-
 .box {
     background: rgba(255,255,255,0.1);
     padding:10px;
     margin-bottom:10px;
     border-radius:8px;
-}
-
-a.file-link {
-    display:inline-block;
-    margin-top:10px;
-    color:#00c6ff;
 }
 </style>
 </head>
@@ -51,34 +40,36 @@ a.file-link {
 
 <h1>Submission Summary</h1>
 
-<div class="info">
 <p><b>Name:</b> <span id="name"></span></p>
 <p><b>Class:</b> <span id="class"></span></p>
 <p><b>School:</b> <span id="school"></span></p>
-</div>
+
+<br>
 
 <div id="answers"></div>
-
-<div id="fileSection"></div>
 
 </div>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
 
-const name = urlParams.get("studentNameField");
-const className = urlParams.get("className");
-const school = urlParams.get("school");
-const scanData = urlParams.get("scanData") || "";
+// ✅ GET STUDENT INFO FROM localStorage
+const studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {};
+
+const name = studentInfo.name || "Unknown";
+const className = studentInfo.className || "Unknown";
+const school = studentInfo.school || "Unknown";
 
 document.getElementById("name").textContent = name;
 document.getElementById("class").textContent = className;
 document.getElementById("school").textContent = school;
 
+
+// GET ANSWERS FROM URL
+const urlParams = new URLSearchParams(window.location.search);
+
 let answers = [];
 const container = document.getElementById("answers");
 
-// collect answers
 for(let i=0;i<50;i++){
     const ans = urlParams.get("q"+i);
     if(ans){
@@ -87,13 +78,8 @@ for(let i=0;i<50;i++){
     }
 }
 
-// show file
-if(scanData){
-    document.getElementById("fileSection").innerHTML =
-        `<a class="file-link" href="${scanData}" target="_blank">View Uploaded Scan</a>`;
-}
 
-// SAVE DATA
+// SAVE TO ADMIN PANEL
 let data = JSON.parse(localStorage.getItem("examResults")) || [];
 
 data.push({
@@ -101,12 +87,12 @@ data.push({
     class: className,
     school,
     answers,
-    file: scanData,
     marks: "",
     date: new Date().toLocaleString()
 });
 
 localStorage.setItem("examResults", JSON.stringify(data));
+
 </script>
 
 </body>
