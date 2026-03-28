@@ -14,6 +14,7 @@
             justify-content:center;
             align-items:center;
             background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+            color:#fff;
         }
 
         .container {
@@ -24,6 +25,8 @@
             width:350px;
             text-align:center;
         }
+
+        h1 { margin-bottom:20px; }
 
         input {
             width:100%;
@@ -47,6 +50,7 @@
             color:#fff;
             cursor:pointer;
         }
+
     </style>
 </head>
 
@@ -54,38 +58,45 @@
 
 <div class="container">
 
-<h2>Examination Portal</h2>
+<h1>Examination Portal</h1>
 
-<input type="text" id="name" placeholder="Your Name">
-<input type="text" id="school" placeholder="School / College">
-<input type="text" id="class" placeholder="Class / Semester">
+<input type="text" id="name" placeholder="Enter Your Name">
+<input type="text" id="school" placeholder="School / College Name">
+<input type="text" id="className" placeholder="Class / Semester">
 
 <button onclick="startExam()">Start Exam</button>
 
 </div>
 
 <script>
+
 function startExam(){
 
     const name = document.getElementById("name").value.trim();
     const school = document.getElementById("school").value.trim();
-    const className = document.getElementById("class").value.trim();
+    const className = document.getElementById("className").value.trim();
 
-    if(name==="" || school==="" || className===""){
+    if(name === "" || school === "" || className === ""){
         alert("Please fill all fields");
         return;
     }
 
-    // ✅ SAVE in localStorage (IMPORTANT)
-    localStorage.setItem("studentInfo", JSON.stringify({
+    // ✅ STORE DATA (THIS IS KEY PART)
+    const studentData = {
         name: name,
         school: school,
         className: className
-    }));
+    };
 
-    // redirect to exam
+    localStorage.setItem("studentInfo", JSON.stringify(studentData));
+
+    // OPTIONAL: clear previous answers (clean attempt)
+    // localStorage.removeItem("examResults");
+
+    // REDIRECT TO EXAM
     window.location.href = "exam.html";
 }
+
 </script>
 
 </body>
