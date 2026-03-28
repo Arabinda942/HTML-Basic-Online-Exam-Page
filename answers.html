@@ -52,7 +52,6 @@ h1 { text-align:center; margin-bottom:20px; }
 
 <script>
 
-// ✅ GET STUDENT INFO FROM localStorage
 const studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {};
 
 const name = studentInfo.name || "Unknown";
@@ -63,23 +62,19 @@ document.getElementById("name").textContent = name;
 document.getElementById("class").textContent = className;
 document.getElementById("school").textContent = school;
 
-
-// GET ANSWERS FROM URL
 const urlParams = new URLSearchParams(window.location.search);
 
 let answers = [];
 const container = document.getElementById("answers");
 
-for(let i=0;i<50;i++){
+for(let i=1;i<=35;i++){
     const ans = urlParams.get("q"+i);
     if(ans){
-        answers.push({q:i+1, ans});
-        container.innerHTML += `<div class="box">Q${i+1}: ${ans}</div>`;
+        answers.push({q:i, ans});
+        container.innerHTML += `<div class="box">Q${i}: ${ans}</div>`;
     }
 }
 
-
-// SAVE TO ADMIN PANEL
 let data = JSON.parse(localStorage.getItem("examResults")) || [];
 
 data.push({
@@ -87,7 +82,7 @@ data.push({
     class: className,
     school,
     answers,
-    marks: "",
+    total: "",
     date: new Date().toLocaleString()
 });
 
