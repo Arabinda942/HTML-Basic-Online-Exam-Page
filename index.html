@@ -50,7 +50,6 @@
             color:#fff;
             cursor:pointer;
         }
-
     </style>
 </head>
 
@@ -60,7 +59,7 @@
 
 <h1>Examination Portal</h1>
 
-<input type="text" id="name" placeholder="Enter Your Name">
+<input type="text" id="name" placeholder="Name">
 <input type="text" id="school" placeholder="School / College Name">
 <input type="text" id="className" placeholder="Class / Semester">
 
@@ -76,24 +75,19 @@ function startExam(){
     const school = document.getElementById("school").value.trim();
     const className = document.getElementById("className").value.trim();
 
-    if(name === "" || school === "" || className === ""){
+    if(name==="" || school==="" || className===""){
         alert("Please fill all fields");
         return;
     }
 
-    // ✅ STORE DATA (THIS IS KEY PART)
-    const studentData = {
+    // SAVE DATA
+    localStorage.setItem("studentInfo", JSON.stringify({
         name: name,
         school: school,
         className: className
-    };
+    }));
 
-    localStorage.setItem("studentInfo", JSON.stringify(studentData));
-
-    // OPTIONAL: clear previous answers (clean attempt)
-    // localStorage.removeItem("examResults");
-
-    // REDIRECT TO EXAM
+    // GO TO EXAM
     window.location.href = "exam.html";
 }
 
