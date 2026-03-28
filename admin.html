@@ -5,68 +5,138 @@
     <style>
         body { font-family: Arial; background:#f5f5f5; padding:20px; }
         h1 { text-align:center; }
+
+        .login-box, .dashboard {
+            max-width:400px;
+            margin:50px auto;
+            background:#fff;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:1px 1px 10px #ccc;
+            text-align:center;
+        }
+
+        input {
+            width:90%;
+            padding:10px;
+            margin:10px 0;
+        }
+
+        button {
+            padding:10px 15px;
+            cursor:pointer;
+        }
+
         table {
             width:100%;
             border-collapse: collapse;
+            margin-top:20px;
             background:#fff;
         }
+
         th, td {
             padding:10px;
             border:1px solid #ccc;
             text-align:center;
         }
-        th { background:#333; color:#fff; }
-        button {
-            padding:10px 15px;
-            margin:10px;
-            cursor:pointer;
+
+        th {
+            background:#333;
+            color:#fff;
         }
+
+        .hidden { display:none; }
     </style>
 </head>
 <body>
 
-<h1>Admin Dashboard</h1>
+<h1>Admin Panel</h1>
 
-<button onclick="clearData()">Clear All Data</button>
+<!-- LOGIN -->
+<div class="login-box" id="loginBox">
+    <h2>Login</h2>
+    <input type="text" id="adminId" placeholder="Enter ID">
+    <input type="password" id="adminPass" placeholder="Enter Password">
+    <br>
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;"></p>
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>MCQ</th>
-            <th>Broad</th>
-            <th>Coding</th>
-            <th>Total</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody id="dataTable"></tbody>
-</table>
+<!-- DASHBOARD -->
+<div class="dashboard hidden" id="dashboard">
+
+    <button onclick="logout()">Logout</button>
+    <button onclick="clearData()">Clear All Data</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Class</th>
+                <th>MCQ</th>
+                <th>Broad</th>
+                <th>Coding</th>
+                <th>Total</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody id="dataTable"></tbody>
+    </table>
+
+</div>
 
 <script>
-const data = JSON.parse(localStorage.getItem("examResults")) || [];
-const table = document.getElementById("dataTable");
 
-data.forEach(student => {
-    const row = `
-        <tr>
-            <td>${student.name}</td>
-            <td>${student.mcq}</td>
-            <td>${student.b4 + student.b5}</td>
-            <td>${student.coding}</td>
-            <td>${student.total}</td>
-            <td>${student.date}</td>
-        </tr>
-    `;
-    table.innerHTML += row;
-});
+// LOGIN FUNCTION
+function login(){
+    const id = document.getElementById("adminId").value;
+    const pass = document.getElementById("adminPass").value;
 
+    if(id === "Arabinda" && pass === "shamballa"){
+        document.getElementById("loginBox").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        loadData();
+    } else {
+        document.getElementById("error").textContent = "Invalid ID or Password";
+    }
+}
+
+// LOAD DATA
+function loadData(){
+    const data = JSON.parse(localStorage.getItem("examResults")) || [];
+    const table = document.getElementById("dataTable");
+    table.innerHTML = "";
+
+    data.forEach(student => {
+        const row = `
+            <tr>
+                <td>${student.name}</td>
+                <td>${student.class}</td>
+                <td>${student.mcq}</td>
+                <td>${student.b4 + student.b5}</td>
+                <td>${student.coding}</td>
+                <td>${student.total}</td>
+                <td>${student.date}</td>
+            </tr>
+        `;
+        table.innerHTML += row;
+    });
+}
+
+// CLEAR DATA
 function clearData(){
     if(confirm("Delete all records?")){
         localStorage.removeItem("examResults");
-        location.reload();
+        loadData();
     }
 }
+
+// LOGOUT
+function logout(){
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("loginBox").classList.remove("hidden");
+}
+
 </script>
 
 </body>
