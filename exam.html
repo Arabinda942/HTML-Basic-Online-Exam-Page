@@ -3,83 +3,24 @@
 <head>
     <title>HTML Basic Exam</title>
     <style>
-
-        body { 
-            font-family: Arial, sans-serif; 
-            background-color: #f5f5f5; 
-            margin:20px; 
-            margin-top:100px; /* space for header */
-        }
-
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin:20px; }
         h1,h2 { text-align:center; }
-
-        .section { 
-            background-color:#fff; 
-            padding:20px; 
-            margin-bottom:20px; 
-            border-radius:8px; 
-            box-shadow:1px 1px 5px #ccc; 
-        }
-
+        .section { background-color:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
         .question { margin-bottom:15px; }
-
-        .timer { 
-            font-size:18px; 
-            font-weight:bold; 
-            color:#00ffcc; 
-        }
-
-        input[type="text"], textarea { 
-            width:100%; 
-            padding:5px; 
-            margin-top:5px; 
-        }
-
+        .timer { font-size:20px; font-weight:bold; color:red; text-align:center; }
+        input[type="text"], textarea { width:100%; padding:5px; margin-top:5px; }
         button { padding:10px 15px; font-size:16px; }
-
-        /* ✅ NEW HEADER */
-        .exam-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.8);
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            z-index: 1000;
-        }
-
-        .student-info {
-            font-size:14px;
-        }
-
     </style>
 </head>
 <body>
 
-<!-- ✅ NEW HEADER -->
-<div class="exam-header">
-
-    <div class="student-info">
-        <div><b>Name:</b> <span id="showName"></span></div>
-        <div><b>Class:</b> <span id="showClass"></span></div>
-        <div><b>School:</b> <span id="showSchool"></span></div>
-    </div>
-
-    <div class="timer" id="timer">
-        Time Left: 120:00
-    </div>
-
-</div>
-
 <h1>HTML Basic Exam</h1>
+
+<div class="timer" id="timer">Time Left: 120:00</div>
 
 <form id="examForm" action="answers.html" method="get">
 
-<!-- Section A -->
+<!-- Section A: MCQs -->
 <div class="section">
     <h2>Section A: MCQs (20 marks)</h2>
 
@@ -117,28 +58,75 @@
         <input type="radio" name="q5" value="heading"> &lt;heading&gt;<br>
         <input type="radio" name="q5" value="head"> &lt;head&gt;
     </div>
-</div>
-
-<!-- Section B -->
-<div class="section">
-    <h2>Section B: Broad Questions (20 marks)</h2>
 
     <div class="question">
-        <p>11. Explain structure of HTML page</p>
-        <textarea name="q11" rows="5"></textarea>
+        <p>6. Which attribute defines link URL?</p>
+        <input type="radio" name="q6" value="href"> href<br>
+        <input type="radio" name="q6" value="src"> src<br>
+        <input type="radio" name="q6" value="link"> link
     </div>
 
     <div class="question">
-        <p>12. Difference between element and tag</p>
+        <p>7. What does the &lt;img&gt; tag do?</p>
+        <input type="radio" name="q7" value="image"> Displays an image<br>
+        <input type="radio" name="q7" value="link"> Creates link<br>
+        <input type="radio" name="q7" value="paragraph"> Paragraph
+    </div>
+
+    <div class="question">
+        <p>8. What is the &lt;title&gt; tag for?</p>
+        <input type="radio" name="q8" value="Page Title"> Defines page title<br>
+        <input type="radio" name="q8" value="Heading"> Heading<br>
+        <input type="radio" name="q8" value="Paragraph"> Paragraph
+    </div>
+
+    <div class="question">
+        <p>9. Which tag defines a table row?</p>
+        <input type="radio" name="q9" value="tr"> &lt;tr&gt;<br>
+        <input type="radio" name="q9" value="td"> &lt;td&gt;<br>
+        <input type="radio" name="q9" value="table"> &lt;table&gt;
+    </div>
+
+    <div class="question">
+        <p>10. Which tag defines table header?</p>
+        <input type="radio" name="q10" value="th"> &lt;th&gt;<br>
+        <input type="radio" name="q10" value="td"> &lt;td&gt;<br>
+        <input type="radio" name="q10" value="tr"> &lt;tr&gt;
+    </div>
+</div>
+
+<!-- Section B: Broad Questions -->
+<div class="section">
+    <h2>Section B: Broad Questions (20 marks)</h2>
+    <div class="question">
+        <p>11. Explain the structure of a basic HTML page with an example.</p>
+        <textarea name="q11" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>12. What is the difference between an element and a tag?</p>
         <textarea name="q12" rows="5"></textarea>
     </div>
 </div>
 
-<!-- Section C -->
+<!-- Section C: Coding Questions -->
 <div class="section">
-    <h2>Section C: Coding</h2>
-
-    <textarea name="q13" rows="5"></textarea>
+    <h2>Section C: Coding Questions (60 marks)</h2>
+    <div class="question">
+        <p>13. Create a basic HTML page with title, heading, paragraph, and one image.</p>
+        <textarea name="q13" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>14. Create a table with 3 columns and 3 rows.</p>
+        <textarea name="q14" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>15. Create a form with Name, Password and Submit button.</p>
+        <textarea name="q15" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>16. Create an unordered list with 5 items.</p>
+        <textarea name="q16" rows="5"></textarea>
+    </div>
 </div>
 
 <input type="hidden" name="studentNameField" id="studentNameField">
@@ -146,53 +134,35 @@
 <div style="text-align:center; margin-top:20px;">
     <button type="submit" onclick="prepareSubmit(event)">Submit Exam</button>
 </div>
-
 </form>
 
 <script>
-
-// ✅ LOAD STUDENT DATA
-const studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {};
-
-document.getElementById("showName").textContent = studentInfo.name || "Unknown";
-document.getElementById("showClass").textContent = studentInfo.className || "Unknown";
-document.getElementById("showSchool").textContent = studentInfo.school || "Unknown";
-
-
-// ✅ TIMER
 let totalSeconds = 120*60;
 const timerElement = document.getElementById('timer');
+let countdown = setInterval(updateTimer, 1000);
 
-let countdown = setInterval(function(){
+function updateTimer(){
     let minutes = Math.floor(totalSeconds/60);
     let seconds = totalSeconds%60;
-
     timerElement.textContent = `Time Left: ${minutes}:${seconds<10?'0'+seconds:seconds}`;
-
     totalSeconds--;
-
     if(totalSeconds<0){
         clearInterval(countdown);
-        alert("Time's up! Submitting exam.");
+        alert("Time's up! Submitting your exam.");
         document.getElementById('examForm').submit();
     }
+}
 
-}, 1000);
-
-
-// ✅ FIXED SUBMIT FUNCTION
 function prepareSubmit(event){
     clearInterval(countdown);
-
-    if(!studentInfo.name){
-        alert("Student info missing. Go back and enter details.");
+    const name = document.getElementById('studentName').value;
+    if(name.trim()===""){
+        alert("Please enter your name!");
         event.preventDefault();
         return false;
     }
-
-    document.getElementById('studentNameField').value = studentInfo.name;
+    document.getElementById('studentNameField').value = name;
 }
-
 </script>
 
 </body>
