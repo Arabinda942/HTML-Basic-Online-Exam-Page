@@ -1,173 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Exam Answers</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color:#f0f0f0; margin:20px; }
-        h1,h2 { text-align:center; }
-        .answer-section { background-color:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
-        .wrong { color:red; font-weight:bold; }
-        .correct { color:green; font-weight:bold; }
-        pre { background:#eee; padding:10px; white-space: pre-wrap; word-wrap: break-word; }
-        .marks { font-size:18px; font-weight:bold; text-align:center; margin-top:10px; }
-        #downloadBtn { padding:10px 20px; font-size:16px; margin-bottom:20px; cursor:pointer; display:block; margin-left:auto; margin-right:auto; }
-    </style>
+<title>Answers</title>
+<style>
+body { font-family: Arial; padding:20px; }
+.box { background:#f5f5f5; padding:15px; margin-bottom:10px; }
+</style>
 </head>
 <body>
 
-<div id="answerSheet">
-<h1>Exam Answers & Marks</h1>
+<h1>Result</h1>
 
-<div class="answer-section">
-    <h2>Student: <span id="studentNameDisplay"></span></h2>
-    <h3>Class: <span id="studentClassDisplay"></span></h3>
-</div>
+<p><b>Name:</b> <span id="name"></span></p>
+<p><b>Class:</b> <span id="class"></span></p>
 
-<div class="answer-section">
-    <h2>Section A: MCQs</h2>
-    <p>1. What is HTML? <span id="a1"></span></p>
-    <p>2. What does HTML stand for? <span id="a2"></span></p>
-    <p>3. Who developed HTML? <span id="a3"></span></p>
-    <p class="marks">MCQ Marks: <span id="mcqMarks"></span>/20</p>
-</div>
+<div id="answers"></div>
 
-<div class="answer-section">
-    <h2>Section B: Broad Questions</h2>
-    <p>11. Structure of HTML page:</p>
-    <pre id="b4"></pre>
-    <p>Marks: <span id="b4Marks"></span>/20</p>
-
-    <p>12. Difference between element and tag:</p>
-    <pre id="b5"></pre>
-    <p>Marks: <span id="b5Marks"></span>/20</p>
-</div>
-
-<div class="answer-section">
-    <h2>Section C: Coding Questions</h2>
-    <p>13:</p><pre id="c13"></pre>
-    <p>14:</p><pre id="c14"></pre>
-    <p>15:</p><pre id="c15"></pre>
-    <p>16:</p><pre id="c16"></pre>
-    <p>17:</p><pre id="c17"></pre>
-    <p>18:</p><pre id="c18"></pre>
-    <p>19:</p><pre id="c19"></pre>
-    <p>20:</p><pre id="c20"></pre>
-    <p class="marks">Coding Marks: <span id="codingMarks"></span>/100</p>
-</div>
-
-<div class="answer-section marks">
-    Total Marks: <span id="totalMarks"></span>/160
-</div>
-</div>
-
-<button id="downloadBtn">Download Answers as PDF</button>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<h2>Total Marks: <span id="total"></span></h2>
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 
-// Student Info
-const studentName = urlParams.get('studentNameField') || "Unknown";
-const className = urlParams.get('className') || "Unknown";
+const name = urlParams.get("studentNameField");
+const className = urlParams.get("className");
 
-document.getElementById('studentNameDisplay').textContent = studentName;
-document.getElementById('studentClassDisplay').textContent = className;
+document.getElementById("name").textContent = name;
+document.getElementById("class").textContent = className;
 
-// MCQ Answers
-const correctAnswers = {
-    q1: "HyperText Markup Language",
-    q2: "HyperText Markup Language",
-    q3: "Tim Berners-Lee"
-};
+let total = 0;
+const container = document.getElementById("answers");
 
-let mcqScore = 0;
-const marksPerQ = 20 / 3;
-
-['q1','q2','q3'].forEach((q,i)=>{
-    const ans = urlParams.get(q) || "No Answer";
-    const span = document.getElementById('a'+(i+1));
-    span.textContent = ans;
-
-    if(ans === correctAnswers[q]){
-        span.className="correct";
-        mcqScore += marksPerQ;
-    } else {
-        span.className="wrong";
-    }
-});
-
-mcqScore = Math.round(mcqScore);
-document.getElementById('mcqMarks').textContent = mcqScore;
-
-// Broad Questions (FIXED)
-const broad4 = urlParams.get('q11') || "";
-document.getElementById('b4').textContent = broad4;
-const b4Marks = broad4.length > 30 ? 20 : 5;
-document.getElementById('b4Marks').textContent = b4Marks;
-
-const broad5 = urlParams.get('q12') || "";
-document.getElementById('b5').textContent = broad5;
-const b5Marks = (broad5.includes("element") && broad5.includes("tag")) ? 20 : 5;
-document.getElementById('b5Marks').textContent = b5Marks;
-
-// Coding Questions
-let codingScore = 0;
-
-for(let i=13;i<=20;i++){
-    const q = 'q'+i;
-    const ans = urlParams.get(q) || "";
-    document.getElementById('c'+i).textContent = ans;
-
-    if(ans.trim() !== ""){
-        codingScore += 12.5;
+for(let i=0;i<50;i++){
+    const ans = urlParams.get("q"+i);
+    if(ans){
+        container.innerHTML += `<div class="box">Q${i+1}: ${ans}</div>`;
+        total += 2;
     }
 }
 
-codingScore = Math.round(codingScore);
-document.getElementById('codingMarks').textContent = codingScore;
+document.getElementById("total").textContent = total;
 
-// Total
-const total = mcqScore + b4Marks + b5Marks + codingScore;
-document.getElementById('totalMarks').textContent = total;
+// SAVE
+let data = JSON.parse(localStorage.getItem("examResults")) || [];
 
-// PDF
-document.getElementById('downloadBtn').addEventListener('click', () => {
-    html2canvas(document.getElementById('answerSheet')).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p','mm','a4');
-
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const imgWidth = pageWidth;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-
-        pdf.addImage(imgData,'PNG',0,0,imgWidth,imgHeight);
-        pdf.save(`Exam_Answers_${studentName}.pdf`);
-    });
-});
-
-// SAVE DATA (NO DUPLICATE)
-const studentData = {
-    name: studentName,
+data.push({
+    name,
     class: className,
-    mcq: mcqScore,
-    b4: b4Marks,
-    b5: b5Marks,
-    coding: codingScore,
-    total: total,
+    total,
     date: new Date().toLocaleString()
-};
+});
 
-let allResults = JSON.parse(localStorage.getItem("examResults")) || [];
-
-if(!allResults.some(s => s.name === studentName && s.total === total)){
-    allResults.push(studentData);
-}
-
-localStorage.setItem("examResults", JSON.stringify(allResults));
-
+localStorage.setItem("examResults", JSON.stringify(data));
 </script>
 
 </body>
