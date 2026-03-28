@@ -146,11 +146,9 @@ Clear All Records
 <th>Total</th>
 <th>Answers</th>
 <th>Scan</th>
-<th>Marks</th>
 <th>Date</th>
 <th>Download</th>
 <th>Delete</th>
-<th>Edit</th>
 </tr>
 </thead>
 
@@ -197,21 +195,22 @@ function load(){
         table.innerHTML += `
         <tr>
 
-        <td contenteditable="true" onblur="updateField(${index}, 'name', this.innerText)">${s.name}</td>
+        <td contenteditable="true" onblur="updateField(${index}, 'name', this.innerText)">
+        ${s.name}
+        </td>
 
-        <td contenteditable="true" onblur="updateField(${index}, 'class', this.innerText)">${s.class}</td>
+        <td contenteditable="true" onblur="updateField(${index}, 'class', this.innerText)">
+        ${s.class}
+        </td>
 
-        <td>${s.total || "-"}</td>
+        <td contenteditable="true" onblur="updateField(${index}, 'total', this.innerText)">
+        ${s.total || ""}
+        </td>
 
         <td><button onclick="viewAnswers(${index})">View</button></td>
 
         <td>
             ${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}
-        </td>
-
-        <td>
-            <input type="number" value="${s.marks || ""}" 
-            onchange="saveMarks(${index}, this.value)">
         </td>
 
         <td>${s.date}</td>
@@ -225,16 +224,12 @@ function load(){
             <button onclick="deleteRecord(${index})">Delete</button>
         </td>
 
-        <td>
-            <button onclick="editAnswers(${index})">Edit</button>
-        </td>
-
         </tr>
         `;
     });
 }
 
-// VIEW ANSWERS
+// VIEW ANSWERS (READ ONLY)
 function viewAnswers(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
@@ -260,15 +255,7 @@ function closeModal(){
     document.getElementById("modal").style.display = "none";
 }
 
-// SAVE MARKS
-function saveMarks(i, marks){
-    let data = JSON.parse(localStorage.getItem("examResults"));
-    data[i].marks = marks;
-    data[i].total = marks;
-    localStorage.setItem("examResults", JSON.stringify(data));
-}
-
-// UPDATE FIELD
+// UPDATE FIELD (NAME, CLASS, TOTAL)
 function updateField(i, field, value){
     let data = JSON.parse(localStorage.getItem("examResults"));
     data[i][field] = value.trim();
@@ -291,37 +278,6 @@ function clearAll(){
         localStorage.removeItem("examResults");
         load();
     }
-}
-
-// EDIT ANSWERS
-function editAnswers(i){
-    const data = JSON.parse(localStorage.getItem("examResults"));
-    const student = data[i];
-
-    let html = `<h2>Edit Answers - ${student.name}</h2>`;
-
-    if(student.answers){
-        student.answers.forEach((a,index)=>{
-            html += `
-            <p>
-            Q${a.q}: 
-            <textarea style="width:100%; margin-bottom:10px;"
-            onchange="saveAnswer(${i}, ${index}, this.value)">${a.ans}</textarea>
-            </p>`;
-        });
-    } else {
-        html += "<p>No answers found</p>";
-    }
-
-    document.getElementById("answerView").innerHTML = html;
-    document.getElementById("modal").style.display = "flex";
-}
-
-// SAVE ANSWER
-function saveAnswer(studentIndex, answerIndex, value){
-    let data = JSON.parse(localStorage.getItem("examResults"));
-    data[studentIndex].answers[answerIndex].ans = value;
-    localStorage.setItem("examResults", JSON.stringify(data));
 }
 
 // DOWNLOAD PDF
