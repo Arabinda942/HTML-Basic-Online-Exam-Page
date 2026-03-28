@@ -3,65 +3,26 @@
 <head>
     <title>Examination Portal</title>
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
 
         body {
             height:100vh;
             display:flex;
             justify-content:center;
             align-items:center;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            overflow:hidden;
-        }
-
-        /* animated glow background */
-        body::before {
-            content:"";
-            position:absolute;
-            width:600px;
-            height:600px;
-            background: radial-gradient(circle, rgba(0,255,255,0.3), transparent);
-            top:-100px;
-            left:-100px;
-            filter: blur(100px);
-        }
-
-        body::after {
-            content:"";
-            position:absolute;
-            width:600px;
-            height:600px;
-            background: radial-gradient(circle, rgba(255,0,255,0.3), transparent);
-            bottom:-100px;
-            right:-100px;
-            filter: blur(100px);
+            background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
         }
 
         .container {
-            position:relative;
-            z-index:1;
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(20px);
             padding:40px;
             border-radius:20px;
             width:350px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
             text-align:center;
-        }
-
-        h1 {
-            margin-bottom:20px;
-            font-weight:600;
-            letter-spacing:1px;
         }
 
         input {
@@ -70,14 +31,11 @@
             margin:10px 0;
             border:none;
             border-radius:8px;
-            outline:none;
             background: rgba(255,255,255,0.15);
             color:#fff;
         }
 
-        input::placeholder {
-            color:#ddd;
-        }
+        input::placeholder { color:#ddd; }
 
         button {
             width:100%;
@@ -85,42 +43,24 @@
             margin-top:15px;
             border:none;
             border-radius:8px;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            background: linear-gradient(135deg,#00c6ff,#0072ff);
             color:#fff;
-            font-size:16px;
             cursor:pointer;
-            transition:0.3s;
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-        }
-
-        .admin-btn {
-            margin-top:15px;
-            background: linear-gradient(135deg, #ff512f, #dd2476);
-        }
-
-        .admin-btn:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-        }
-
     </style>
 </head>
+
 <body>
 
 <div class="container">
 
-    <h1>Examination Portal</h1>
+<h2>Examination Portal</h2>
 
-    <input type="text" id="name" placeholder="Enter Your Name">
-    <input type="text" id="school" placeholder="School / College Name">
-    <input type="text" id="class" placeholder="Class / Semester">
+<input type="text" id="name" placeholder="Your Name">
+<input type="text" id="school" placeholder="School / College">
+<input type="text" id="class" placeholder="Class / Semester">
 
-    <button onclick="startExam()">Start Exam</button>
-
-    <button class="admin-btn" onclick="goAdmin()">Admin Panel</button>
+<button onclick="startExam()">Start Exam</button>
 
 </div>
 
@@ -131,20 +71,20 @@ function startExam(){
     const school = document.getElementById("school").value.trim();
     const className = document.getElementById("class").value.trim();
 
-    if(name === "" || school === "" || className === ""){
-        alert("Please fill all details");
+    if(name==="" || school==="" || className===""){
+        alert("Please fill all fields");
         return;
     }
 
-    const url = `exam.html?studentNameField=${encodeURIComponent(name)}
-    &school=${encodeURIComponent(school)}
-    &className=${encodeURIComponent(className)}`;
+    // ✅ SAVE in localStorage (IMPORTANT)
+    localStorage.setItem("studentInfo", JSON.stringify({
+        name: name,
+        school: school,
+        className: className
+    }));
 
-    window.location.href = url;
-}
-
-function goAdmin(){
-    window.location.href = "admin.html";
+    // redirect to exam
+    window.location.href = "exam.html";
 }
 </script>
 
