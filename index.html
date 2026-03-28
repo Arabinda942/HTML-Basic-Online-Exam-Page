@@ -1,70 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Exam Portal</title>
-    <style>
-        body {
-            font-family: Arial;
-            background:#222;
-            color:#fff;
-            text-align:center;
-            padding:40px;
-        }
-        h1 { margin-bottom:30px; }
-
-        .grid {
-            display:grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
-            gap:20px;
-        }
-
-        .card {
-            background:#444;
-            padding:20px;
-            border-radius:10px;
-            cursor:pointer;
-            transition:0.3s;
-        }
-
-        .card:hover {
-            background:#666;
-            transform:scale(1.05);
-        }
-
-        a {
-            text-decoration:none;
-            color:#fff;
-            font-size:18px;
-        }
-    </style>
+<title>Exam Portal</title>
+<style>
+body { font-family: Arial; background:#222; color:#fff; text-align:center; padding:40px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:20px; }
+.card { background:#444; padding:20px; border-radius:10px; cursor:pointer; }
+.card:hover { background:#666; }
+a { color:#fff; text-decoration:none; }
+</style>
 </head>
 <body>
 
 <h1>Examination Portal</h1>
 
 <div class="grid">
-
-<a href="exam.html"><div class="card">Class 6</div></a>
-<a href="exam.html"><div class="card">Class 7</div></a>
-<a href="exam.html"><div class="card">Class 8</div></a>
-<a href="exam.html"><div class="card">Class 9</div></a>
-<a href="exam.html"><div class="card">Class 10</div></a>
-<a href="exam.html"><div class="card">Class 11</div></a>
-<a href="exam.html"><div class="card">Class 12</div></a>
-
-<a href="exam.html"><div class="card">BCA (Anisha)</div></a>
-<a href="exam.html"><div class="card">BCA (Hrishita)</div></a>
-<a href="exam.html"><div class="card">BCA General</div></a>
-<a href="exam.html"><div class="card">MCA</div></a>
-<a href="exam.html"><div class="card">B-Tech</div></a>
-
+<a href="exam.html?paper=papers/bca_anisha.json&className=BCA Anisha"><div class="card">BCA (Anisha)</div></a>
+<a href="exam.html?paper=papers/class6.json&className=Class 6"><div class="card">Class 6</div></a>
 </div>
 
-<br><br>
-
-<a href="admin.html">
-    <button style="padding:10px 20px; font-size:16px;">Admin Login</button>
-</a>
+<br>
+<a href="admin.html"><button>Admin Panel</button></a>
 
 </body>
 </html>
