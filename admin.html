@@ -1,140 +1,181 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Panel</title>
-    <style>
-        body { font-family: Arial; background:#f5f5f5; padding:20px; }
-        h1 { text-align:center; }
+<title>Admin Panel</title>
 
-        .login-box, .dashboard {
-            max-width:400px;
-            margin:50px auto;
-            background:#fff;
-            padding:20px;
-            border-radius:10px;
-            box-shadow:1px 1px 10px #ccc;
-            text-align:center;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-        input {
-            width:90%;
-            padding:10px;
-            margin:10px 0;
-        }
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
 
-        button {
-            padding:10px 15px;
-            cursor:pointer;
-        }
+body {
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+    padding:30px;
+}
 
-        table {
-            width:100%;
-            border-collapse: collapse;
-            margin-top:20px;
-            background:#fff;
-        }
+h1 { text-align:center; margin-bottom:20px; }
 
-        th, td {
-            padding:10px;
-            border:1px solid #ccc;
-            text-align:center;
-        }
+.login-box, .panel {
+    max-width:900px;
+    margin:auto;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    padding:25px;
+    border-radius:15px;
+}
 
-        th {
-            background:#333;
-            color:#fff;
-        }
+input {
+    padding:10px;
+    margin:10px;
+    border:none;
+    border-radius:6px;
+}
 
-        .hidden { display:none; }
-    </style>
+button {
+    padding:8px 12px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.table-container {
+    overflow-x:auto;
+    margin-top:20px;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td {
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    text-align:center;
+}
+
+.hidden { display:none; }
+
+a { color:#00c6ff; }
+</style>
 </head>
+
 <body>
 
 <h1>Admin Panel</h1>
 
 <!-- LOGIN -->
-<div class="login-box" id="loginBox">
-    <h2>Login</h2>
-    <input type="text" id="adminId" placeholder="Enter ID">
-    <input type="password" id="adminPass" placeholder="Enter Password">
-    <br>
+<div id="loginBox" class="login-box">
+    <input id="id" placeholder="Admin ID">
+    <input id="pass" type="password" placeholder="Password">
     <button onclick="login()">Login</button>
-    <p id="error" style="color:red;"></p>
+    <p id="err"></p>
 </div>
 
-<!-- DASHBOARD -->
-<div class="dashboard hidden" id="dashboard">
+<!-- PANEL -->
+<div id="panel" class="panel hidden">
 
-    <button onclick="logout()">Logout</button>
-    <button onclick="clearData()">Clear All Data</button>
+<button onclick="logout()">Logout</button>
+<button onclick="clearData()">Clear All</button>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Class</th>
-                <th>MCQ</th>
-                <th>Broad</th>
-                <th>Coding</th>
-                <th>Total</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody id="dataTable"></tbody>
-    </table>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Class</th>
+<th>School</th>
+<th>Answers</th>
+<th>Scan</th>
+<th>Marks</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="data"></tbody>
+</table>
+</div>
 
 </div>
 
 <script>
 
-// LOGIN FUNCTION
+// LOGIN
 function login(){
-    const id = document.getElementById("adminId").value;
-    const pass = document.getElementById("adminPass").value;
+    const user = id.value;
+    const passw = pass.value;
 
-    if(id === "Arabinda" && pass === "shamballa"){
-        document.getElementById("loginBox").classList.add("hidden");
-        document.getElementById("dashboard").classList.remove("hidden");
-        loadData();
+    if(user==="Arabinda" && passw==="shamballa"){
+        loginBox.classList.add("hidden");
+        panel.classList.remove("hidden");
+        load();
     } else {
-        document.getElementById("error").textContent = "Invalid ID or Password";
+        err.textContent="Wrong credentials";
     }
 }
 
 // LOAD DATA
-function loadData(){
+function load(){
     const data = JSON.parse(localStorage.getItem("examResults")) || [];
-    const table = document.getElementById("dataTable");
-    table.innerHTML = "";
+    const table = document.getElementById("data");
+    table.innerHTML="";
 
-    data.forEach(student => {
+    data.forEach((s,index)=>{
         const row = `
-            <tr>
-                <td>${student.name}</td>
-                <td>${student.class}</td>
-                <td>${student.mcq}</td>
-                <td>${student.b4 + student.b5}</td>
-                <td>${student.coding}</td>
-                <td>${student.total}</td>
-                <td>${student.date}</td>
-            </tr>
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.class}</td>
+            <td>${s.school || "-"}</td>
+
+            <td><button onclick="viewAnswers(${index})">View</button></td>
+
+            <td>${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}</td>
+
+            <td>
+                <input type="number" value="${s.marks}" 
+                onchange="saveMarks(${index}, this.value)">
+            </td>
+
+            <td>${s.date}</td>
+        </tr>
         `;
         table.innerHTML += row;
     });
 }
 
-// CLEAR DATA
+// VIEW ANSWERS
+function viewAnswers(i){
+    const data = JSON.parse(localStorage.getItem("examResults"));
+    const student = data[i];
+
+    let text = `Answers of ${student.name}\n\n`;
+
+    student.answers.forEach(a=>{
+        text += `Q${a.q}: ${a.ans}\n\n`;
+    });
+
+    alert(text);
+}
+
+// SAVE MARKS
+function saveMarks(i, marks){
+    let data = JSON.parse(localStorage.getItem("examResults"));
+    data[i].marks = marks;
+    localStorage.setItem("examResults", JSON.stringify(data));
+}
+
+// CLEAR
 function clearData(){
     if(confirm("Delete all records?")){
         localStorage.removeItem("examResults");
-        loadData();
+        load();
     }
 }
 
 // LOGOUT
 function logout(){
-    document.getElementById("dashboard").classList.add("hidden");
-    document.getElementById("loginBox").classList.remove("hidden");
+    panel.classList.add("hidden");
+    loginBox.classList.remove("hidden");
 }
 
 </script>
