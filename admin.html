@@ -1,63 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Panel</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<title>Admin</title>
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-
-body {
-    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:#fff;
-    padding:30px;
-}
-
-h1 { text-align:center; margin-bottom:20px; }
-
-.login-box, .panel {
-    max-width:900px;
-    margin:auto;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-    padding:25px;
-    border-radius:15px;
-}
-
-input {
-    padding:10px;
-    margin:10px;
-    border:none;
-    border-radius:6px;
-}
-
-button {
-    padding:8px 12px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.table-container {
-    overflow-x:auto;
-    margin-top:20px;
-}
-
-table {
-    width:100%;
-    border-collapse:collapse;
-}
-
-th, td {
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,0.2);
-    text-align:center;
-}
-
+body { font-family: Arial; padding:20px; }
 .hidden { display:none; }
 
-a { color:#00c6ff; }
+table { width:100%; border-collapse:collapse; }
+td, th { border:1px solid #ccc; padding:10px; text-align:center; }
+
+button { padding:5px 10px; cursor:pointer; }
+
+/* MODAL */
+.modal {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content {
+    background:#fff;
+    padding:20px;
+    width:80%;
+    max-height:80%;
+    overflow:auto;
+}
 </style>
 </head>
 
@@ -66,51 +40,62 @@ a { color:#00c6ff; }
 <h1>Admin Panel</h1>
 
 <!-- LOGIN -->
-<div id="loginBox" class="login-box">
-    <input id="id" placeholder="Admin ID">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="err"></p>
+<div id="login">
+<input id="adminId" placeholder="ID">
+<input id="adminPass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="err" style="color:red;"></p>
 </div>
 
 <!-- PANEL -->
-<div id="panel" class="panel hidden">
+<div id="panel" class="hidden">
 
 <button onclick="logout()">Logout</button>
-<button onclick="clearData()">Clear All</button>
 
-<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>Name</th>
 <th>Class</th>
-<th>School</th>
+<th>Total</th>
 <th>Answers</th>
 <th>Scan</th>
 <th>Marks</th>
 <th>Date</th>
+<th>Download</th>
 </tr>
 </thead>
+
 <tbody id="data"></tbody>
+
 </table>
-</div>
 
 </div>
+
+<!-- ANSWER MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+    <button onclick="closeModal()">Close</button>
+    <div id="answerView"></div>
+</div>
+</div>
+
+<!-- PDF LIB -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 
 // LOGIN
 function login(){
-    const user = id.value;
-    const passw = pass.value;
+    const user = document.getElementById("adminId").value;
+    const pass = document.getElementById("adminPass").value;
 
-    if(user==="Arabinda" && passw==="shamballa"){
-        loginBox.classList.add("hidden");
-        panel.classList.remove("hidden");
+    if(user==="Arabinda" && pass==="shamballa"){
+        document.getElementById("login").style.display="none";
+        document.getElementById("panel").classList.remove("hidden");
         load();
     } else {
-        err.textContent="Wrong credentials";
+        document.getElementById("err").textContent="Wrong login";
     }
 }
 
@@ -118,28 +103,37 @@ function login(){
 function load(){
     const data = JSON.parse(localStorage.getItem("examResults")) || [];
     const table = document.getElementById("data");
-    table.innerHTML="";
+
+    table.innerHTML = "";
 
     data.forEach((s,index)=>{
-        const row = `
+
+        table.innerHTML += `
         <tr>
-            <td>${s.name}</td>
-            <td>${s.class}</td>
-            <td>${s.school || "-"}</td>
+        <td>${s.name}</td>
+        <td>${s.class}</td>
+        <td>${s.total || "-"}</td>
 
-            <td><button onclick="viewAnswers(${index})">View</button></td>
+        <td><button onclick="viewAnswers(${index})">View</button></td>
 
-            <td>${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}</td>
+        <td>
+            ${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}
+        </td>
 
-            <td>
-                <input type="number" value="${s.marks}" 
-                onchange="saveMarks(${index}, this.value)">
-            </td>
+        <td>
+            <input type="number" value="${s.marks || ""}" 
+            onchange="saveMarks(${index}, this.value)">
+        </td>
 
-            <td>${s.date}</td>
+        <td>${s.date}</td>
+
+        <td>
+            <button onclick="downloadPDF(${index})">PDF</button>
+            <button onclick="downloadDOC(${index})">Word</button>
+        </td>
+
         </tr>
         `;
-        table.innerHTML += row;
     });
 }
 
@@ -148,34 +142,80 @@ function viewAnswers(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
 
-    let text = `Answers of ${student.name}\n\n`;
+    let html = `<h2>${student.name}</h2>`;
+    html += `<p><b>Class:</b> ${student.class}</p>`;
+    html += `<p><b>School:</b> ${student.school}</p><hr>`;
 
-    student.answers.forEach(a=>{
-        text += `Q${a.q}: ${a.ans}\n\n`;
-    });
+    if(student.answers){
+        student.answers.forEach(a=>{
+            html += `<p><b>Q${a.q}:</b> ${a.ans}</p>`;
+        });
+    } else {
+        html += "<p>No answers found</p>";
+    }
 
-    alert(text);
+    document.getElementById("answerView").innerHTML = html;
+    document.getElementById("modal").style.display = "flex";
+}
+
+// CLOSE MODAL
+function closeModal(){
+    document.getElementById("modal").style.display = "none";
 }
 
 // SAVE MARKS
 function saveMarks(i, marks){
     let data = JSON.parse(localStorage.getItem("examResults"));
     data[i].marks = marks;
+    data[i].total = marks;
     localStorage.setItem("examResults", JSON.stringify(data));
 }
 
-// CLEAR
-function clearData(){
-    if(confirm("Delete all records?")){
-        localStorage.removeItem("examResults");
-        load();
+// DOWNLOAD PDF
+function downloadPDF(i){
+    const data = JSON.parse(localStorage.getItem("examResults"));
+    const student = data[i];
+
+    let content = `Name: ${student.name}\nClass: ${student.class}\nSchool: ${student.school}\n\n`;
+
+    if(student.answers){
+        student.answers.forEach(a=>{
+            content += `Q${a.q}: ${a.ans}\n\n`;
+        });
     }
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    pdf.text(content, 10, 10);
+    pdf.save(`${student.name}_Exam.pdf`);
+}
+
+// DOWNLOAD WORD
+function downloadDOC(i){
+    const data = JSON.parse(localStorage.getItem("examResults"));
+    const student = data[i];
+
+    let content = `Name: ${student.name}\nClass: ${student.class}\nSchool: ${student.school}\n\n`;
+
+    if(student.answers){
+        student.answers.forEach(a=>{
+            content += `Q${a.q}: ${a.ans}\n\n`;
+        });
+    }
+
+    const blob = new Blob([content], { type: "application/msword" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = `${student.name}_Exam.doc`;
+    link.click();
 }
 
 // LOGOUT
 function logout(){
-    panel.classList.add("hidden");
-    loginBox.classList.remove("hidden");
+    document.getElementById("panel").classList.add("hidden");
+    document.getElementById("login").style.display="block";
 }
 
 </script>
