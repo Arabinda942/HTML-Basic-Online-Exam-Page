@@ -20,6 +20,7 @@
 
 <div class="answer-section">
     <h2>Student: <span id="studentNameDisplay"></span></h2>
+    <h3>Class: <span id="studentClassDisplay"></span></h3>
 </div>
 
 <div class="answer-section">
@@ -32,24 +33,25 @@
 
 <div class="answer-section">
     <h2>Section B: Broad Questions</h2>
-    <p>4. Structure of HTML page:</p>
+    <p>11. Structure of HTML page:</p>
     <pre id="b4"></pre>
     <p>Marks: <span id="b4Marks"></span>/20</p>
-    <p>5. Difference between element and tag:</p>
+
+    <p>12. Difference between element and tag:</p>
     <pre id="b5"></pre>
     <p>Marks: <span id="b5Marks"></span>/20</p>
 </div>
 
 <div class="answer-section">
     <h2>Section C: Coding Questions</h2>
-    <p>13. HTML page:</p><pre id="c13"></pre>
-    <p>14. Table:</p><pre id="c14"></pre>
-    <p>15. Form:</p><pre id="c15"></pre>
-    <p>16. Unordered list:</p><pre id="c16"></pre>
-    <p>17. Ordered list:</p><pre id="c17"></pre>
-    <p>18. Link page:</p><pre id="c18"></pre>
-    <p>19. Div with background color:</p><pre id="c19"></pre>
-    <p>20. List of 3 images:</p><pre id="c20"></pre>
+    <p>13:</p><pre id="c13"></pre>
+    <p>14:</p><pre id="c14"></pre>
+    <p>15:</p><pre id="c15"></pre>
+    <p>16:</p><pre id="c16"></pre>
+    <p>17:</p><pre id="c17"></pre>
+    <p>18:</p><pre id="c18"></pre>
+    <p>19:</p><pre id="c19"></pre>
+    <p>20:</p><pre id="c20"></pre>
     <p class="marks">Coding Marks: <span id="codingMarks"></span>/100</p>
 </div>
 
@@ -62,12 +64,16 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 
-// Student Name
+// Student Info
 const studentName = urlParams.get('studentNameField') || "Unknown";
+const className = urlParams.get('className') || "Unknown";
+
 document.getElementById('studentNameDisplay').textContent = studentName;
+document.getElementById('studentClassDisplay').textContent = className;
 
 // MCQ Answers
 const correctAnswers = {
@@ -77,55 +83,91 @@ const correctAnswers = {
 };
 
 let mcqScore = 0;
+const marksPerQ = 20 / 3;
+
 ['q1','q2','q3'].forEach((q,i)=>{
     const ans = urlParams.get(q) || "No Answer";
     const span = document.getElementById('a'+(i+1));
     span.textContent = ans;
+
     if(ans === correctAnswers[q]){
         span.className="correct";
-        mcqScore += 20/3;
+        mcqScore += marksPerQ;
     } else {
         span.className="wrong";
     }
 });
-document.getElementById('mcqMarks').textContent = Math.round(mcqScore);
 
-// Broad Questions
-const broad4 = urlParams.get('q4') || "";
+mcqScore = Math.round(mcqScore);
+document.getElementById('mcqMarks').textContent = mcqScore;
+
+// Broad Questions (FIXED)
+const broad4 = urlParams.get('q11') || "";
 document.getElementById('b4').textContent = broad4;
-document.getElementById('b4Marks').textContent = broad4.toLowerCase().includes("html") ? 20 : 0;
+const b4Marks = broad4.length > 30 ? 20 : 5;
+document.getElementById('b4Marks').textContent = b4Marks;
 
-const broad5 = urlParams.get('q5') || "";
+const broad5 = urlParams.get('q12') || "";
 document.getElementById('b5').textContent = broad5;
-document.getElementById('b5Marks').textContent = broad5.toLowerCase().includes("element") && broad5.toLowerCase().includes("tag") ? 20 : 0;
+const b5Marks = (broad5.includes("element") && broad5.includes("tag")) ? 20 : 5;
+document.getElementById('b5Marks').textContent = b5Marks;
 
-// Coding Questions Q13-Q20
+// Coding Questions
 let codingScore = 0;
+
 for(let i=13;i<=20;i++){
     const q = 'q'+i;
     const ans = urlParams.get(q) || "";
     document.getElementById('c'+i).textContent = ans;
-    if(ans.trim()!=="") codingScore += 12.5; // each coding question 12.5 marks
+
+    if(ans.trim() !== ""){
+        codingScore += 12.5;
+    }
 }
+
+codingScore = Math.round(codingScore);
 document.getElementById('codingMarks').textContent = codingScore;
 
-// Total Marks
-const total = Math.round(mcqScore) + parseInt(document.getElementById('b4Marks').textContent) + parseInt(document.getElementById('b5Marks').textContent) + codingScore;
+// Total
+const total = mcqScore + b4Marks + b5Marks + codingScore;
 document.getElementById('totalMarks').textContent = total;
 
-// PDF Download
+// PDF
 document.getElementById('downloadBtn').addEventListener('click', () => {
     html2canvas(document.getElementById('answerSheet')).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p','mm','a4');
+
         const pageWidth = pdf.internal.pageSize.getWidth();
         const imgWidth = pageWidth;
         const imgHeight = canvas.height * imgWidth / canvas.width;
+
         pdf.addImage(imgData,'PNG',0,0,imgWidth,imgHeight);
         pdf.save(`Exam_Answers_${studentName}.pdf`);
     });
 });
+
+// SAVE DATA (NO DUPLICATE)
+const studentData = {
+    name: studentName,
+    class: className,
+    mcq: mcqScore,
+    b4: b4Marks,
+    b5: b5Marks,
+    coding: codingScore,
+    total: total,
+    date: new Date().toLocaleString()
+};
+
+let allResults = JSON.parse(localStorage.getItem("examResults")) || [];
+
+if(!allResults.some(s => s.name === studentName && s.total === total)){
+    allResults.push(studentData);
+}
+
+localStorage.setItem("examResults", JSON.stringify(allResults));
+
 </script>
 
 </body>
