@@ -200,12 +200,12 @@ function load(){
         ${s.name}
         </td>
 
-        <td contenteditable="true" onblur="updateField(${index}, 'School_College', this.innerText)">
-        ${s.School_College}
+        <td contenteditable="true" onblur="updateField(${index}, 'school', this.innerText)">
+        ${s.school}
         </td>
 
-        <td contenteditable="true" onblur="updateField(${index}, 'Class_Sem', this.innerText)">
-        ${s.Class_Sem}
+        <td contenteditable="true" onblur="updateField(${index}, 'class', this.innerText)">
+        ${s.class}
         </td>
 
         <td contenteditable="true" onblur="updateField(${index}, 'total', this.innerText)">
@@ -234,7 +234,7 @@ function load(){
     });
 }
 
-// VIEW ANSWERS (READ ONLY)
+// VIEW ANSWERS
 function viewAnswers(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
@@ -260,14 +260,14 @@ function closeModal(){
     document.getElementById("modal").style.display = "none";
 }
 
-// UPDATE FIELD (NAME, CLASS, TOTAL)
+// UPDATE FIELD
 function updateField(i, field, value){
     let data = JSON.parse(localStorage.getItem("examResults"));
     data[i][field] = value.trim();
     localStorage.setItem("examResults", JSON.stringify(data));
 }
 
-// DELETE SINGLE
+// DELETE
 function deleteRecord(i){
     if(confirm("Delete this record?")){
         let data = JSON.parse(localStorage.getItem("examResults"));
@@ -285,7 +285,7 @@ function clearAll(){
     }
 }
 
-// DOWNLOAD PDF
+// PDF
 function downloadPDF(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
@@ -304,7 +304,7 @@ function downloadPDF(i){
     pdf.save(`${student.name}_Exam.pdf`);
 }
 
-// DOWNLOAD WORD
+// WORD
 function downloadDOC(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
