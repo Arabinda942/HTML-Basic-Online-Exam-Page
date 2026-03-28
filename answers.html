@@ -1,52 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Answers</title>
+<title>Submitted Answers</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-body { font-family: Arial; padding:20px; }
-.box { background:#f5f5f5; padding:15px; margin-bottom:10px; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+
+body {
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+    padding:30px;
+}
+
+.container {
+    max-width:800px;
+    margin:auto;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    padding:30px;
+    border-radius:15px;
+}
+
+h1 { text-align:center; margin-bottom:20px; }
+
+.info {
+    margin-bottom:20px;
+    font-size:16px;
+}
+
+.box {
+    background: rgba(255,255,255,0.1);
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+}
+
+a.file-link {
+    display:inline-block;
+    margin-top:10px;
+    color:#00c6ff;
+}
 </style>
 </head>
+
 <body>
 
-<h1>Result</h1>
+<div class="container">
 
+<h1>Submission Summary</h1>
+
+<div class="info">
 <p><b>Name:</b> <span id="name"></span></p>
 <p><b>Class:</b> <span id="class"></span></p>
+<p><b>School:</b> <span id="school"></span></p>
+</div>
 
 <div id="answers"></div>
 
-<h2>Total Marks: <span id="total"></span></h2>
+<div id="fileSection"></div>
+
+</div>
 
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 
 const name = urlParams.get("studentNameField");
 const className = urlParams.get("className");
+const school = urlParams.get("school");
+const scanData = urlParams.get("scanData") || "";
 
 document.getElementById("name").textContent = name;
 document.getElementById("class").textContent = className;
+document.getElementById("school").textContent = school;
 
-let total = 0;
+let answers = [];
 const container = document.getElementById("answers");
 
+// collect answers
 for(let i=0;i<50;i++){
     const ans = urlParams.get("q"+i);
     if(ans){
+        answers.push({q:i+1, ans});
         container.innerHTML += `<div class="box">Q${i+1}: ${ans}</div>`;
-        total += 2;
     }
 }
 
-document.getElementById("total").textContent = total;
+// show file
+if(scanData){
+    document.getElementById("fileSection").innerHTML =
+        `<a class="file-link" href="${scanData}" target="_blank">View Uploaded Scan</a>`;
+}
 
-// SAVE
+// SAVE DATA
 let data = JSON.parse(localStorage.getItem("examResults")) || [];
 
 data.push({
     name,
     class: className,
-    total,
+    school,
+    answers,
+    file: scanData,
+    marks: "",
     date: new Date().toLocaleString()
 });
 
