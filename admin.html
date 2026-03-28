@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: Arial; background:#f5f5f5; padding:20px; }
+        h1 { text-align:center; }
+        table {
+            width:100%;
+            border-collapse: collapse;
+            background:#fff;
+        }
+        th, td {
+            padding:10px;
+            border:1px solid #ccc;
+            text-align:center;
+        }
+        th { background:#333; color:#fff; }
+        button {
+            padding:10px 15px;
+            margin:10px;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<button onclick="clearData()">Clear All Data</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>MCQ</th>
+            <th>Broad</th>
+            <th>Coding</th>
+            <th>Total</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody id="dataTable"></tbody>
+</table>
+
+<script>
+const data = JSON.parse(localStorage.getItem("examResults")) || [];
+const table = document.getElementById("dataTable");
+
+data.forEach(student => {
+    const row = `
+        <tr>
+            <td>${student.name}</td>
+            <td>${student.mcq}</td>
+            <td>${student.b4 + student.b5}</td>
+            <td>${student.coding}</td>
+            <td>${student.total}</td>
+            <td>${student.date}</td>
+        </tr>
+    `;
+    table.innerHTML += row;
+});
+
+function clearData(){
+    if(confirm("Delete all records?")){
+        localStorage.removeItem("examResults");
+        location.reload();
+    }
+}
+</script>
+
+</body>
+</html>
