@@ -1,58 +1,173 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Exam</title>
-<style>
-body { font-family: Arial; margin:20px; }
-.question { margin-bottom:15px; }
-textarea { width:100%; }
-</style>
+    <title>HTML Basic Exam</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin:20px; }
+        h1,h2 { text-align:center; }
+        .section { background-color:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
+        .question { margin-bottom:15px; }
+        .timer { font-size:20px; font-weight:bold; color:red; text-align:center; }
+        input[type="text"], textarea { width:100%; padding:5px; margin-top:5px; }
+        button { padding:10px 15px; font-size:16px; }
+    </style>
 </head>
 <body>
 
-<h1>Loading...</h1>
+<h1>HTML Basic Exam</h1>
+
+<div class="section">
+    <p><b>Student Name:</b></p>
+    <input type="text" id="studentName" placeholder="Enter your name">
+</div>
+
+<div class="timer" id="timer">Time Left: 120:00</div>
 
 <form id="examForm" action="answers.html" method="get">
 
-<input type="text" name="studentNameField" placeholder="Enter Name" required>
-<input type="hidden" name="className" id="className">
+<!-- Section A: MCQs -->
+<div class="section">
+    <h2>Section A: MCQs (20 marks)</h2>
 
-<div id="questionsContainer"></div>
+    <div class="question">
+        <p>1. What is HTML?</p>
+        <input type="radio" name="q1" value="HyperText Markup Language"> HyperText Markup Language<br>
+        <input type="radio" name="q1" value="Home Tool Markup Language"> Home Tool Markup Language<br>
+        <input type="radio" name="q1" value="Hyperlinks and Text Markup Language"> Hyperlinks and Text Markup Language
+    </div>
 
-<button type="submit">Submit</button>
+    <div class="question">
+        <p>2. What does HTML stand for?</p>
+        <input type="radio" name="q2" value="HyperText Markup Language"> HyperText Markup Language<br>
+        <input type="radio" name="q2" value="Home Tool Markup Language"> Home Tool Markup Language<br>
+        <input type="radio" name="q2" value="Hyperlinks and Text Markup Language"> Hyperlinks and Text Markup Language
+    </div>
+
+    <div class="question">
+        <p>3. Who developed HTML?</p>
+        <input type="radio" name="q3" value="Tim Berners-Lee"> Tim Berners-Lee<br>
+        <input type="radio" name="q3" value="Brendan Eich"> Brendan Eich<br>
+        <input type="radio" name="q3" value="Marc Andreessen"> Marc Andreessen
+    </div>
+
+    <div class="question">
+        <p>4. Which tag is used for paragraphs?</p>
+        <input type="radio" name="q4" value="p"> &lt;p&gt;<br>
+        <input type="radio" name="q4" value="para"> &lt;para&gt;<br>
+        <input type="radio" name="q4" value="text"> &lt;text&gt;
+    </div>
+
+    <div class="question">
+        <p>5. Which tag is used for headings?</p>
+        <input type="radio" name="q5" value="h1"> &lt;h1&gt; to &lt;h6&gt;<br>
+        <input type="radio" name="q5" value="heading"> &lt;heading&gt;<br>
+        <input type="radio" name="q5" value="head"> &lt;head&gt;
+    </div>
+
+    <div class="question">
+        <p>6. Which attribute defines link URL?</p>
+        <input type="radio" name="q6" value="href"> href<br>
+        <input type="radio" name="q6" value="src"> src<br>
+        <input type="radio" name="q6" value="link"> link
+    </div>
+
+    <div class="question">
+        <p>7. What does the &lt;img&gt; tag do?</p>
+        <input type="radio" name="q7" value="image"> Displays an image<br>
+        <input type="radio" name="q7" value="link"> Creates link<br>
+        <input type="radio" name="q7" value="paragraph"> Paragraph
+    </div>
+
+    <div class="question">
+        <p>8. What is the &lt;title&gt; tag for?</p>
+        <input type="radio" name="q8" value="Page Title"> Defines page title<br>
+        <input type="radio" name="q8" value="Heading"> Heading<br>
+        <input type="radio" name="q8" value="Paragraph"> Paragraph
+    </div>
+
+    <div class="question">
+        <p>9. Which tag defines a table row?</p>
+        <input type="radio" name="q9" value="tr"> &lt;tr&gt;<br>
+        <input type="radio" name="q9" value="td"> &lt;td&gt;<br>
+        <input type="radio" name="q9" value="table"> &lt;table&gt;
+    </div>
+
+    <div class="question">
+        <p>10. Which tag defines table header?</p>
+        <input type="radio" name="q10" value="th"> &lt;th&gt;<br>
+        <input type="radio" name="q10" value="td"> &lt;td&gt;<br>
+        <input type="radio" name="q10" value="tr"> &lt;tr&gt;
+    </div>
+</div>
+
+<!-- Section B: Broad Questions -->
+<div class="section">
+    <h2>Section B: Broad Questions (20 marks)</h2>
+    <div class="question">
+        <p>11. Explain the structure of a basic HTML page with an example.</p>
+        <textarea name="q11" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>12. What is the difference between an element and a tag?</p>
+        <textarea name="q12" rows="5"></textarea>
+    </div>
+</div>
+
+<!-- Section C: Coding Questions -->
+<div class="section">
+    <h2>Section C: Coding Questions (60 marks)</h2>
+    <div class="question">
+        <p>13. Create a basic HTML page with title, heading, paragraph, and one image.</p>
+        <textarea name="q13" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>14. Create a table with 3 columns and 3 rows.</p>
+        <textarea name="q14" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>15. Create a form with Name, Password and Submit button.</p>
+        <textarea name="q15" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>16. Create an unordered list with 5 items.</p>
+        <textarea name="q16" rows="5"></textarea>
+    </div>
+</div>
+
+<input type="hidden" name="studentNameField" id="studentNameField">
+
+<div style="text-align:center; margin-top:20px;">
+    <button type="submit" onclick="prepareSubmit(event)">Submit Exam</button>
+</div>
 </form>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const paperFile = urlParams.get("paper");
-const className = urlParams.get("className");
+let totalSeconds = 120*60;
+const timerElement = document.getElementById('timer');
+let countdown = setInterval(updateTimer, 1000);
 
-document.getElementById("className").value = className;
+function updateTimer(){
+    let minutes = Math.floor(totalSeconds/60);
+    let seconds = totalSeconds%60;
+    timerElement.textContent = `Time Left: ${minutes}:${seconds<10?'0'+seconds:seconds}`;
+    totalSeconds--;
+    if(totalSeconds<0){
+        clearInterval(countdown);
+        alert("Time's up! Submitting your exam.");
+        document.getElementById('examForm').submit();
+    }
+}
 
-fetch(paperFile)
-.then(res => res.json())
-.then(data => {
-    document.querySelector("h1").textContent = data.title;
-
-    const container = document.getElementById("questionsContainer");
-
-    data.questions.forEach((q, index) => {
-        let html = `<div class="question"><p>${index+1}. ${q.question}</p>`;
-
-        if(q.type === "mcq"){
-            q.options.forEach(opt => {
-                html += `<input type="radio" name="q${index}" value="${opt}"> ${opt}<br>`;
-            });
-        }
-
-        if(q.type === "text" || q.type === "code"){
-            html += `<textarea name="q${index}" rows="4"></textarea>`;
-        }
-
-        html += `</div>`;
-        container.innerHTML += html;
-    });
-});
+function prepareSubmit(event){
+    clearInterval(countdown);
+    const name = document.getElementById('studentName').value;
+    if(name.trim()===""){
+        alert("Please enter your name!");
+        event.preventDefault();
+        return false;
+    }
+    document.getElementById('studentNameField').value = name;
+}
 </script>
 
 </body>
