@@ -17,13 +17,11 @@ body {
     padding:30px;
 }
 
-/* TITLE */
 h1 {
     text-align:center;
     margin-bottom:20px;
 }
 
-/* LOGIN BOX */
 #login {
     max-width:300px;
     margin:50px auto;
@@ -51,7 +49,6 @@ h1 {
     cursor:pointer;
 }
 
-/* PANEL */
 .hidden { display:none; }
 
 #panel {
@@ -60,7 +57,6 @@ h1 {
     border-radius:15px;
 }
 
-/* TABLE */
 table {
     width:100%;
     border-collapse:collapse;
@@ -82,7 +78,6 @@ td, th {
     text-align:center;
 }
 
-/* BUTTONS */
 button {
     padding:6px 10px;
     border:none;
@@ -100,7 +95,6 @@ input[type="number"] {
     padding:5px;
 }
 
-/* MODAL */
 .modal {
     position:fixed;
     top:0;
@@ -129,7 +123,6 @@ input[type="number"] {
 
 <h1>Admin Panel</h1>
 
-<!-- LOGIN -->
 <div id="login">
 <input id="adminId" placeholder="ID">
 <input id="adminPass" type="password" placeholder="Password">
@@ -137,10 +130,13 @@ input[type="number"] {
 <p id="err" style="color:red;"></p>
 </div>
 
-<!-- PANEL -->
 <div id="panel" class="hidden">
 
 <button onclick="logout()">Logout</button>
+
+<button onclick="clearAll()" style="background:red; color:white; margin-bottom:10px;">
+Clear All Records
+</button>
 
 <table>
 <thead>
@@ -153,6 +149,8 @@ input[type="number"] {
 <th>Marks</th>
 <th>Date</th>
 <th>Download</th>
+<th>Delete</th>
+<th>Edit</th>
 </tr>
 </thead>
 
@@ -162,7 +160,6 @@ input[type="number"] {
 
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modal-content">
     <button onclick="closeModal()">Close</button>
@@ -170,7 +167,6 @@ input[type="number"] {
 </div>
 </div>
 
-<!-- PDF LIB -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
@@ -200,8 +196,11 @@ function load(){
 
         table.innerHTML += `
         <tr>
-        <td>${s.name}</td>
-        <td>${s.class}</td>
+
+        <td contenteditable="true" onblur="updateField(${index}, 'name', this.innerText)">${s.name}</td>
+
+        <td contenteditable="true" onblur="updateField(${index}, 'class', this.innerText)">${s.class}</td>
+
         <td>${s.total || "-"}</td>
 
         <td><button onclick="viewAnswers(${index})">View</button></td>
@@ -220,6 +219,14 @@ function load(){
         <td>
             <button onclick="downloadPDF(${index})">PDF</button>
             <button onclick="downloadDOC(${index})">Word</button>
+        </td>
+
+        <td>
+            <button onclick="deleteRecord(${index})">Delete</button>
+        </td>
+
+        <td>
+            <button onclick="editAnswers(${index})">Edit</button>
         </td>
 
         </tr>
@@ -258,6 +265,62 @@ function saveMarks(i, marks){
     let data = JSON.parse(localStorage.getItem("examResults"));
     data[i].marks = marks;
     data[i].total = marks;
+    localStorage.setItem("examResults", JSON.stringify(data));
+}
+
+// UPDATE FIELD
+function updateField(i, field, value){
+    let data = JSON.parse(localStorage.getItem("examResults"));
+    data[i][field] = value.trim();
+    localStorage.setItem("examResults", JSON.stringify(data));
+}
+
+// DELETE SINGLE
+function deleteRecord(i){
+    if(confirm("Delete this record?")){
+        let data = JSON.parse(localStorage.getItem("examResults"));
+        data.splice(i,1);
+        localStorage.setItem("examResults", JSON.stringify(data));
+        load();
+    }
+}
+
+// CLEAR ALL
+function clearAll(){
+    if(confirm("Delete ALL records?")){
+        localStorage.removeItem("examResults");
+        load();
+    }
+}
+
+// EDIT ANSWERS
+function editAnswers(i){
+    const data = JSON.parse(localStorage.getItem("examResults"));
+    const student = data[i];
+
+    let html = `<h2>Edit Answers - ${student.name}</h2>`;
+
+    if(student.answers){
+        student.answers.forEach((a,index)=>{
+            html += `
+            <p>
+            Q${a.q}: 
+            <textarea style="width:100%; margin-bottom:10px;"
+            onchange="saveAnswer(${i}, ${index}, this.value)">${a.ans}</textarea>
+            </p>`;
+        });
+    } else {
+        html += "<p>No answers found</p>";
+    }
+
+    document.getElementById("answerView").innerHTML = html;
+    document.getElementById("modal").style.display = "flex";
+}
+
+// SAVE ANSWER
+function saveAnswer(studentIndex, answerIndex, value){
+    let data = JSON.parse(localStorage.getItem("examResults"));
+    data[studentIndex].answers[answerIndex].ans = value;
     localStorage.setItem("examResults", JSON.stringify(data));
 }
 
