@@ -26,7 +26,16 @@ app.post("/results", (req, res) => {
     res.json({status:"success"});
 });
 
-// Delete a record
+// Get a single student's result by name
+app.get("/results/:name", (req, res) => {
+    const name = req.params.name.toLowerCase();
+    if(!fs.existsSync(DATA_FILE)) return res.json(null);
+    const data = JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    const student = data.find(s => s.name.toLowerCase() === name);
+    res.json(student || null);
+});
+
+// Delete a record by index
 app.delete("/results/:index", (req, res) => {
     const index = parseInt(req.params.index);
     if(!fs.existsSync(DATA_FILE)) return res.json({status:"error"});
