@@ -1,73 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>View Exam Answers</title>
+<title>Your Exam Answers</title>
 <style>
-body { font-family: Arial, sans-serif; padding:20px; background:#f0f2f5; }
+body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; }
 h1 { text-align:center; }
-table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff; color:#000; border-radius:10px; overflow:hidden; }
-th, td { padding:10px; border:1px solid #ccc; text-align:center; }
-th { background:#0072ff; color:#fff; }
-button { padding:5px 10px; border:none; border-radius:5px; cursor:pointer; }
+#answers { max-width:900px; margin:auto; background:#fff; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.2); }
+button { padding:10px 15px; margin:10px 0; border:none; border-radius:5px; background:#0072ff; color:#fff; cursor:pointer; }
+button:hover { opacity:0.9; }
 </style>
 </head>
 <body>
 
-<h1>Submitted Exam Answers</h1>
-
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>School</th>
-<th>Class</th>
-<th>Date</th>
-<th>View Answers</th>
-<th>File</th>
-</tr>
-</thead>
-<tbody id="answersTable"></tbody>
-</table>
-
-<div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center;">
-<div style="background:#fff; color:#000; padding:20px; width:90%; max-width:800px; max-height:90%; overflow:auto; border-radius:10px;">
-<button onclick="closeModal()">Close</button>
-<div id="answerView"></div>
-</div>
+<h1>Your Submitted Answers</h1>
+<div id="answers">Loading...</div>
+<div style="text-align:center;">
+<button onclick="downloadPDF()">Download PDF</button>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-function loadAnswers(){
-    const data = JSON.parse(localStorage.getItem("examResults")) || [];
-    const tbody = document.getElementById("answersTable");
-    tbody.innerHTML = "";
-    data.forEach((s,i)=>{
-        tbody.innerHTML += `<tr>
-            <td>${s.name}</td>
-            <td>${s.school}</td>
-            <td>${s.class}</td>
-            <td>${s.date}</td>
-            <td><button onclick="viewAnswers(${i})">View</button></td>
-            <td>${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}</td>
-        </tr>`;
+function getQueryParams() {
+    const params = {};
+    location.search.slice(1).split("&").forEach(p=>{
+        const [k,v] = p.split("=");
+        params[k] = decodeURIComponent(v);
     });
+    return params;
 }
+const { name } = getQueryParams();
+const container = document.getElementById("answers");
+let studentData = null;
 
-function viewAnswers(i){
-    const data = JSON.parse(localStorage.getItem("examResults")) || [];
-    const s = data[i];
-    let html = `<h2>${s.name}</h2><p><b>Class:</b> ${s.class}</p><p><b>School:</b> ${s.school}</p><hr>`;
-    s.answers.forEach(a=>{
-        html += `<p><b>${a.q}:</b> ${a.ans}</p>`;
-    });
-    document.getElementById("answerView").innerHTML = html;
-    document.getElementById("modal").style.display="flex";
+fetch(`http://localhost:3000/results/${encodeURIComponent(name)}`)
+.then(res=>res.json())
+.then(data=>{
+    if(!data){ container.innerHTML="No submission found."; return; }
+    studentData = data;
+    let html = `<h2>${data.name}</h2><p><b>School:</b> ${data.school}</p><p><b>Class:</b> ${data.class}</p><hr>`;
+    if(data.answers) data.answers.forEach(a=>html += `<p><b>Q${a.q}:</b> ${a.ans}</p>`);
+    container.innerHTML = html;
+});
+
+function downloadPDF(){
+    if(!studentData) return;
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    let content = `Name: ${studentData.name}\nSchool: ${studentData.school}\nClass: ${studentData.class}\n\n`;
+    if(studentData.answers) studentData.answers.forEach(a=>content += `Q${a.q}: ${a.ans}\n\n`);
+    pdf.text(content,10,10);
+    pdf.save(`${studentData.name}_Exam.pdf`);
 }
-
-function closeModal(){ document.getElementById("modal").style.display="none"; }
-
-window.onload = loadAnswers;
 </script>
-
 </body>
 </html>
