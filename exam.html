@@ -1,168 +1,145 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>HTML Full Exam</title>
-
-<style>
-body { font-family: Arial; background:#f5f5f5; margin:20px; }
-h1,h2 { text-align:center; }
-.section { background:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
-.question { margin-bottom:15px; }
-.timer { font-size:20px; font-weight:bold; color:red; text-align:center; }
-input[type="text"], textarea { width:100%; padding:6px; margin-top:5px; height:350px;}
-button { padding:10px 15px; font-size:16px; }
-</style>
-
+    <title>HTML Basic Exam</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin:20px; }
+        h1,h2 { text-align:center; }
+        .section { background-color:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
+        .question { margin-bottom:15px; }
+        .timer { font-size:20px; font-weight:bold; color:red; text-align:center; }
+        input[type="text"], textarea { width:100%; padding:5px; margin-top:5px; }
+        button { padding:10px 15px; font-size:16px; }
+    </style>
 </head>
 <body>
 
-<h1>HTML Examination (100 Marks)</h1>
+<h1>HTML Basic Exam</h1>
 
 <div class="timer" id="timer">Time Left: 120:00</div>
 
-<form id="examForm" action="answers.html" method="get">
+<form id="examForm">
 
-<!-- SECTION A -->
+<!-- Section A: MCQs -->
 <div class="section">
-<h2>Section A: MCQ (20 Marks)</h2>
+    <h2>Section A: MCQs (20 marks)</h2>
 
-<div class="question">1. HTML stands for?<br>
-<input type="radio" name="q1" value="Hyper Text Markup Language"> Hyper Text Markup Language<br>
-<input type="radio" name="q1" value="High Text Machine Language"> High Text Machine Language<br>
-<input type="radio" name="q1" value="Hyper Tool Multi Language"> Hyper Tool Multi Language
+    <div class="question">
+        <p>1. What is HTML?</p>
+        <input type="radio" name="q1" value="HyperText Markup Language"> HyperText Markup Language<br>
+        <input type="radio" name="q1" value="Home Tool Markup Language"> Home Tool Markup Language<br>
+        <input type="radio" name="q1" value="Hyperlinks and Text Markup Language"> Hyperlinks and Text Markup Language
+    </div>
+
+    <div class="question">
+        <p>2. What does HTML stand for?</p>
+        <input type="radio" name="q2" value="HyperText Markup Language"> HyperText Markup Language<br>
+        <input type="radio" name="q2" value="Home Tool Markup Language"> Home Tool Markup Language<br>
+        <input type="radio" name="q2" value="Hyperlinks and Text Markup Language"> Hyperlinks and Text Markup Language
+    </div>
+
+    <div class="question">
+        <p>3. Who developed HTML?</p>
+        <input type="radio" name="q3" value="Tim Berners-Lee"> Tim Berners-Lee<br>
+        <input type="radio" name="q3" value="Brendan Eich"> Brendan Eich<br>
+        <input type="radio" name="q3" value="Marc Andreessen"> Marc Andreessen
+    </div>
+
+    <div class="question">
+        <p>4. Which tag is used for paragraphs?</p>
+        <input type="radio" name="q4" value="p"> &lt;p&gt;<br>
+        <input type="radio" name="q4" value="para"> &lt;para&gt;<br>
+        <input type="radio" name="q4" value="text"> &lt;text&gt;
+    </div>
+
+    <div class="question">
+        <p>5. Which tag is used for headings?</p>
+        <input type="radio" name="q5" value="h1"> &lt;h1&gt; to &lt;h6&gt;<br>
+        <input type="radio" name="q5" value="heading"> &lt;heading&gt;<br>
+        <input type="radio" name="q5" value="head"> &lt;head&gt;
+    </div>
+
+    <div class="question">
+        <p>6. Which attribute defines link URL?</p>
+        <input type="radio" name="q6" value="href"> href<br>
+        <input type="radio" name="q6" value="src"> src<br>
+        <input type="radio" name="q6" value="link"> link
+    </div>
+
+    <div class="question">
+        <p>7. What does the &lt;img&gt; tag do?</p>
+        <input type="radio" name="q7" value="image"> Displays an image<br>
+        <input type="radio" name="q7" value="link"> Creates link<br>
+        <input type="radio" name="q7" value="paragraph"> Paragraph
+    </div>
+
+    <div class="question">
+        <p>8. What is the &lt;title&gt; tag for?</p>
+        <input type="radio" name="q8" value="Page Title"> Defines page title<br>
+        <input type="radio" name="q8" value="Heading"> Heading<br>
+        <input type="radio" name="q8" value="Paragraph"> Paragraph
+    </div>
+
+    <div class="question">
+        <p>9. Which tag defines a table row?</p>
+        <input type="radio" name="q9" value="tr"> &lt;tr&gt;<br>
+        <input type="radio" name="q9" value="td"> &lt;td&gt;<br>
+        <input type="radio" name="q9" value="table"> &lt;table&gt;
+    </div>
+
+    <div class="question">
+        <p>10. Which tag defines table header?</p>
+        <input type="radio" name="q10" value="th"> &lt;th&gt;<br>
+        <input type="radio" name="q10" value="td"> &lt;td&gt;<br>
+        <input type="radio" name="q10" value="tr"> &lt;tr&gt;
+    </div>
 </div>
 
-<div class="question">2. Tag for image?<br>
-<input type="radio" name="q2" value="<img>"> &lt;img&gt;<br>
-<input type="radio" name="q2" value="<image>"> &lt;image&gt;<br>
-<input type="radio" name="q2" value="<pic>"> &lt;pic&gt;
-</div>
-
-<div class="question">3. Attribute for link?<br>
-<input type="radio" name="q3" value="href"> href<br>
-<input type="radio" name="q3" value="src"> src<br>
-<input type="radio" name="q3" value="link"> link
-</div>
-
-<div class="question">4. Paragraph tag?<br>
-<input type="radio" name="q4" value="<p>"> &lt;p&gt;<br>
-<input type="radio" name="q4" value="<text>"> &lt;text&gt;<br>
-<input type="radio" name="q4" value="<para>"> &lt;para&gt;
-</div>
-
-<div class="question">5. Heading tags?<br>
-<input type="radio" name="q5" value="h1-h6"> h1–h6<br>
-<input type="radio" name="q5" value="head"> head<br>
-<input type="radio" name="q5" value="heading"> heading
-</div>
-
-<div class="question">6. Line break tag?<br>
-<input type="radio" name="q6" value="<br>"> &lt;br&gt;<br>
-<input type="radio" name="q6" value="<lb>"> &lt;lb&gt;<br>
-<input type="radio" name="q6" value="<break>"> &lt;break&gt;
-</div>
-
-<div class="question">7. Table row tag?<br>
-<input type="radio" name="q7" value="<tr>"> &lt;tr&gt;<br>
-<input type="radio" name="q7" value="<td>"> &lt;td&gt;<br>
-<input type="radio" name="q7" value="<th>"> &lt;th&gt;
-</div>
-
-<div class="question">8. Table data tag?<br>
-<input type="radio" name="q8" value="<td>"> &lt;td&gt;<br>
-<input type="radio" name="q8" value="<tr>"> &lt;tr&gt;<br>
-<input type="radio" name="q8" value="<table>"> &lt;table&gt;
-</div>
-
-<div class="question">9. Ordered list?<br>
-<input type="radio" name="q9" value="<ol>"> &lt;ol&gt;<br>
-<input type="radio" name="q9" value="<ul>"> &lt;ul&gt;<br>
-<input type="radio" name="q9" value="<li>"> &lt;li&gt;
-</div>
-
-<div class="question">10. Unordered list?<br>
-<input type="radio" name="q10" value="<ul>"> &lt;ul&gt;<br>
-<input type="radio" name="q10" value="<ol>"> &lt;ol&gt;<br>
-<input type="radio" name="q10" value="<list>"> &lt;list&gt;
-</div>
-
-<div class="question">11. Hyperlink tag?<br>
-<input type="radio" name="q11" value="<a>"> &lt;a&gt;<br>
-<input type="radio" name="q11" value="<link>"> &lt;link&gt;<br>
-<input type="radio" name="q11" value="<href>"> &lt;href&gt;
-</div>
-
-<div class="question">12. Image path attribute?<br>
-<input type="radio" name="q12" value="src"> src<br>
-<input type="radio" name="q12" value="href"> href<br>
-<input type="radio" name="q12" value="link"> link
-</div>
-
-<div class="question">13. Title tag location?<br>
-<input type="radio" name="q13" value="head"> head<br>
-<input type="radio" name="q13" value="body"> body<br>
-<input type="radio" name="q13" value="html"> html
-</div>
-
-<div class="question">14. Bold tag?<br>
-<input type="radio" name="q14" value="<b>"> &lt;b&gt;<br>
-<input type="radio" name="q14" value="<i>"> &lt;i&gt;<br>
-<input type="radio" name="q14" value="<u>"> &lt;u&gt;
-</div>
-
-<div class="question">15. Italic tag?<br>
-<input type="radio" name="q15" value="<i>"> &lt;i&gt;<br>
-<input type="radio" name="q15" value="<b>"> &lt;b&gt;<br>
-<input type="radio" name="q15" value="<u>"> &lt;u&gt;
-</div>
-
-</div>
-
-<!-- SECTION B -->
+<!-- Section B: Broad Questions -->
 <div class="section">
-<h2>Section B: Theory (20 Marks)</h2>
-
-<div class="question">21. Explain structure of HTML page.<textarea name="q21"></textarea></div>
-<div class="question">22. Difference between tag and element.<textarea name="q22"></textarea></div>
-<div class="question">23. Explain lists in HTML.<textarea name="q23"></textarea></div>
-<div class="question">24. Explain tables.<textarea name="q24"></textarea></div>
-<div class="question">25. Explain forms and inputs.<textarea name="q25"></textarea></div>
-
+    <h2>Section B: Broad Questions (20 marks)</h2>
+    <div class="question">
+        <p>11. Explain the structure of a basic HTML page with an example.</p>
+        <textarea name="q11" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>12. What is the difference between an element and a tag?</p>
+        <textarea name="q12" rows="5"></textarea>
+    </div>
 </div>
 
-<!-- SECTION C -->
+<!-- Section C: Coding Questions -->
 <div class="section">
-<h2>Section C: Coding (60 Marks)</h2>
-
-<div class="question">26. Create a complete HTML page with title, heading, paragraph, and an image with width, height, and alt attribute.<textarea name="q26"></textarea></div>
-
-<div class="question">27. Create a webpage with an image that acts as a hyperlink to another website.<textarea name="q27"></textarea></div>
-
-<div class="question">28. Create an unordered list with 5 items and apply different bullet styles.<textarea name="q28"></textarea></div>
-
-<div class="question">29. Create an ordered list using Roman numbers starting from 5.<textarea name="q29"></textarea></div>
-
-<div class="question">30. Create a table with 4 rows and 3 columns including a heading row.<textarea name="q30"></textarea></div>
-
-<div class="question">31. Create a webpage that contains a heading, paragraph, image, and a hyperlink together.<textarea name="q31"></textarea></div>
-
-<div class="question">32. Create a form with Name, Email, Password, Gender (radio), and Submit button.<textarea name="q32"></textarea></div>
-
-<div class="question">33. Create a nested list (list inside another list) with at least 2 levels.<textarea name="q33"></textarea></div>
-
-<div class="question">34. Create a table using rowspan and colspan properly.<textarea name="q34"></textarea></div>
-
-<div class="question">35. Create a complete School Webpage including heading, image, list of subjects, table of students, and a form for admission.<textarea name="q35"></textarea></div>
-
+    <h2>Section C: Coding Questions (60 marks)</h2>
+    <div class="question">
+        <p>13. Create a basic HTML page with title, heading, paragraph, and one image.</p>
+        <textarea name="q13" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>14. Create a table with 3 columns and 3 rows.</p>
+        <textarea name="q14" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>15. Create a form with Name, Password and Submit button.</p>
+        <textarea name="q15" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>16. Create an unordered list with 5 items.</p>
+        <textarea name="q16" rows="5"></textarea>
+    </div>
 </div>
 
+<input type="text" id="studentName" placeholder="Enter Your Name">
 <input type="hidden" name="studentNameField" id="studentNameField">
 
-<div style="text-align:center;">
-<button type="submit" onclick="prepareSubmit(event)">Submit Exam</button>
+<div style="text-align:center; margin-top:20px;">
+    <button type="submit" onclick="prepareSubmit(event)">Submit Exam</button>
 </div>
-
 </form>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
 let totalSeconds = 120*60;
@@ -172,22 +149,63 @@ let countdown = setInterval(updateTimer, 1000);
 function updateTimer(){
     let minutes = Math.floor(totalSeconds/60);
     let seconds = totalSeconds%60;
-    timerElement.textContent = "Time Left: " + minutes + ":" + (seconds<10?"0"+seconds:seconds);
+    timerElement.textContent = `Time Left: ${minutes}:${seconds<10?'0'+seconds:seconds}`;
     totalSeconds--;
     if(totalSeconds<0){
         clearInterval(countdown);
-        alert("Time's up!");
-        document.getElementById('examForm').submit();
+        alert("Time's up! Submitting your exam.");
+        prepareSubmit();
     }
 }
 
 function prepareSubmit(event){
+    if(event) event.preventDefault();
     clearInterval(countdown);
-
-    const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
-    const name = studentInfo.name;
-
+    const name = document.getElementById('studentName').value.trim();
+    if(name===""){
+        alert("Please enter your name!");
+        return false;
+    }
     document.getElementById('studentNameField').value = name;
+
+    const answers = {};
+    for(let i=1;i<=16;i++){
+        const q = 'q'+i;
+        const el = document.querySelector(`[name="${q}"]`);
+        if(el){
+            if(el.type==='radio'){
+                const checked = document.querySelector(`[name="${q}"]:checked`);
+                answers[q] = checked ? checked.value : "";
+            } else {
+                answers[q] = el.value || "";
+            }
+        }
+    }
+
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const examRef = db.ref("examResults");
+    examRef.push({
+        name: name,
+        answers: answers,
+        date: new Date().toLocaleString()
+    }).then(()=>{
+        alert("Exam submitted successfully!");
+        window.location.href="answers.html?studentNameField="+encodeURIComponent(name);
+    }).catch((err)=>{
+        alert("Error submitting exam: "+err.message);
+    });
 }
 </script>
 
