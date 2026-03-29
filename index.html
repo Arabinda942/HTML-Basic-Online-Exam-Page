@@ -2,93 +2,37 @@
 <html>
 <head>
     <title>Examination Portal</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-
-        body {
-            height:100vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-            color:#fff;
-        }
-
-        .container {
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(20px);
-            padding:40px;
-            border-radius:20px;
-            width:350px;
-            text-align:center;
-        }
-
+        body { height:100vh; display:flex; justify-content:center; align-items:center; background: linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#fff; }
+        .container { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px); padding:40px; border-radius:20px; width:350px; text-align:center; }
         h1 { margin-bottom:20px; }
-
-        input {
-            width:100%;
-            padding:12px;
-            margin:10px 0;
-            border:none;
-            border-radius:8px;
-            background: rgba(255,255,255,0.15);
-            color:#fff;
-        }
-
+        input { width:100%; padding:12px; margin:10px 0; border:none; border-radius:8px; background: rgba(255,255,255,0.15); color:#fff; }
         input::placeholder { color:#ddd; }
-
-        button {
-            width:100%;
-            padding:12px;
-            margin-top:15px;
-            border:none;
-            border-radius:8px;
-            background: linear-gradient(135deg,#00c6ff,#0072ff);
-            color:#fff;
-            cursor:pointer;
-        }
+        button { width:100%; padding:12px; margin-top:15px; border:none; border-radius:8px; background: linear-gradient(135deg,#00c6ff,#0072ff); color:#fff; cursor:pointer; }
     </style>
 </head>
-
 <body>
 
 <div class="container">
-
 <h1>Examination Portal</h1>
-
-<input type="text" id="name" placeholder="Full Name">
+<input type="text" id="name" placeholder="Name">
 <input type="text" id="school" placeholder="School/College Name">
 <input type="text" id="className" placeholder="Class/Semester">
-
 <button onclick="startExam()">Start Exam</button>
-
 </div>
 
 <script>
-
 function startExam(){
-
     const name = document.getElementById("name").value.trim();
     const school = document.getElementById("school").value.trim();
     const className = document.getElementById("className").value.trim();
+    if(name==="" || school==="" || className===""){ alert("Please fill all fields"); return; }
 
-    if(name === "" || school === "" || className === ""){
-        alert("Please fill all fields");
-        return;
-    }
-
-    // SAVE DATA TO LOCAL STORAGE
-    const studentInfo = { name, school, className };
-    localStorage.setItem("studentInfo", JSON.stringify(studentInfo));
-
-    // PASS DATA TO EXAM.HTML VIA QUERY STRING
-    const query = `?name=${encodeURIComponent(name)}&school=${encodeURIComponent(school)}&cls=${encodeURIComponent(className)}`;
-    window.location.href = `exam.html${query}`;
+    localStorage.setItem("studentInfo", JSON.stringify({ name, school, className }));
+    window.location.href = "exam.html";
 }
-
 </script>
 
 </body>
