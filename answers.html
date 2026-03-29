@@ -1,93 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Submission Summary</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+<title>Submitted Answers</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-
-body {
-    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:#fff;
-    padding:30px;
-}
-
-.container {
-    max-width:800px;
-    margin:auto;
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(15px);
-    padding:30px;
-    border-radius:15px;
-}
-
+body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; }
 h1 { text-align:center; margin-bottom:20px; }
-
-.box {
-    background: rgba(255,255,255,0.1);
-    padding:10px;
-    margin-bottom:10px;
-    border-radius:8px;
-}
+table { width:100%; border-collapse:collapse; background:#fff; }
+th, td { border:1px solid #ccc; padding:10px; text-align:center; }
+th { background:#0072ff; color:#fff; }
+a { color:#0072ff; text-decoration:none; }
+a:hover { text-decoration:underline; }
+#search { margin-bottom:10px; padding:8px; width:50%; border-radius:5px; border:1px solid #ccc; }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<h1>Submitted Answers</h1>
 
-<h1>Submission Summary</h1>
+<input id="search" placeholder="Search by student name..." oninput="filterTable()">
 
-<p><b>Name:</b> <span id="name"></span></p>
-<p><b>Class:</b> <span id="class"></span></p>
-<p><b>School:</b> <span id="school"></span></p>
-
-<br>
-
-<div id="answers"></div>
-
-</div>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>School/College</th>
+<th>Class/Sem</th>
+<th>Answers</th>
+<th>Scan</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="data"></tbody>
+</table>
 
 <script>
-
-const studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {};
-
-const name = studentInfo.name || "Unknown";
-const className = studentInfo.className || "Unknown";
-const school = studentInfo.school || "Unknown";
-
-document.getElementById("name").textContent = name;
-document.getElementById("class").textContent = className;
-document.getElementById("school").textContent = school;
-
-const urlParams = new URLSearchParams(window.location.search);
-
-let answers = [];
-const container = document.getElementById("answers");
-
-for(let i=1;i<=35;i++){
-    const ans = urlParams.get("q"+i);
-    if(ans){
-        answers.push({q:i, ans});
-        container.innerHTML += `<div class="box">Q${i}: ${ans}</div>`;
-    }
+function load(){
+    const data = JSON.parse(localStorage.getItem("examResults")) || [];
+    const table = document.getElementById("data");
+    table.innerHTML = "";
+    data.forEach((s,index)=>{
+        let ansHTML = "";
+        if(s.answers && s.answers.length){
+            s.answers.forEach(a=> ansHTML += `Q${a.q}: ${a.ans}<br>`);
+        } else ansHTML = "No answers";
+        table.innerHTML += `<tr>
+            <td>${s.name}</td>
+            <td>${s.school}</td>
+            <td>${s.class}</td>
+            <td>${ansHTML}</td>
+            <td>${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}</td>
+            <td>${s.date}</td>
+        </tr>`;
+    });
 }
 
-let data = JSON.parse(localStorage.getItem("examResults")) || [];
+function filterTable(){
+    const term = document.getElementById("search").value.toLowerCase();
+    const rows = document.querySelectorAll("#data tr");
+    rows.forEach(r=>{
+        const name = r.cells[0].innerText.toLowerCase();
+        r.style.display = name.includes(term) ? "" : "none";
+    });
+}
 
-data.push({
-    name,
-    class: className,
-    school,
-    answers,
-    total: "",
-    date: new Date().toLocaleString()
-});
-
-localStorage.setItem("examResults", JSON.stringify(data));
-
+load();
 </script>
 
 </body>
