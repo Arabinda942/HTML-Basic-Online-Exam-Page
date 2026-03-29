@@ -1,56 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Your Exam Answers</title>
+<title>Your Answers</title>
 <style>
-body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; }
-h1 { text-align:center; }
-#answers { max-width:900px; margin:auto; background:#fff; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.2); }
-button { padding:10px 15px; margin:10px 0; border:none; border-radius:5px; background:#0072ff; color:#fff; cursor:pointer; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; padding:20px; }
+h1,h2 { text-align:center; }
+.container { max-width:900px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.2); }
+button { padding:10px 20px; border:none; border-radius:5px; background:#0072ff; color:#fff; cursor:pointer; margin-top:10px; }
 button:hover { opacity:0.9; }
+p { margin:8px 0; }
 </style>
 </head>
 <body>
 
 <h1>Your Submitted Answers</h1>
-<div id="answers">Loading...</div>
+<div class="container" id="answersContainer"></div>
 <div style="text-align:center;">
-<button onclick="downloadPDF()">Download PDF</button>
+<button onclick="downloadPDF()">Download as PDF</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-function getQueryParams() {
-    const params = {};
-    location.search.slice(1).split("&").forEach(p=>{
-        const [k,v] = p.split("=");
-        params[k] = decodeURIComponent(v);
-    });
-    return params;
-}
-const { name } = getQueryParams();
-const container = document.getElementById("answers");
-let studentData = null;
-
-fetch(`http://localhost:3000/results/${encodeURIComponent(name)}`)
-.then(res=>res.json())
-.then(data=>{
-    if(!data){ container.innerHTML="No submission found."; return; }
-    studentData = data;
+const data = JSON.parse(localStorage.getItem("examSubmission"));
+const container = document.getElementById("answersContainer");
+if(data){
     let html = `<h2>${data.name}</h2><p><b>School:</b> ${data.school}</p><p><b>Class:</b> ${data.class}</p><hr>`;
-    if(data.answers) data.answers.forEach(a=>html += `<p><b>Q${a.q}:</b> ${a.ans}</p>`);
+    data.answers.forEach(a=>{ html += `<p><b>${a.q}:</b> ${a.ans}</p>`; });
     container.innerHTML = html;
-});
+} else {
+    container.innerHTML = "<p>No submission found.</p>";
+}
 
 function downloadPDF(){
-    if(!studentData) return;
+    if(!data) return;
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
-    let content = `Name: ${studentData.name}\nSchool: ${studentData.school}\nClass: ${studentData.class}\n\n`;
-    if(studentData.answers) studentData.answers.forEach(a=>content += `Q${a.q}: ${a.ans}\n\n`);
-    pdf.text(content,10,10);
-    pdf.save(`${studentData.name}_Exam.pdf`);
+    let content = `Name: ${data.name}\nSchool: ${data.school}\nClass: ${data.class}\n\n`;
+    data.answers.forEach(a=> content += `${a.q}: ${a.ans}\n\n`);
+    pdf.text(content, 10, 10);
+    pdf.save(`${data.name}_Exam.pdf`);
 }
 </script>
+
 </body>
 </html>
