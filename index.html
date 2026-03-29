@@ -59,7 +59,7 @@
 
 <h1>Examination Portal</h1>
 
-<input type="text" id="name" placeholder="Name">
+<input type="text" id="name" placeholder="Full Name">
 <input type="text" id="school" placeholder="School/College Name">
 <input type="text" id="className" placeholder="Class/Semester">
 
@@ -75,20 +75,18 @@ function startExam(){
     const school = document.getElementById("school").value.trim();
     const className = document.getElementById("className").value.trim();
 
-    if(name==="" || school==="" || className===""){
+    if(name === "" || school === "" || className === ""){
         alert("Please fill all fields");
         return;
     }
 
-    // SAVE DATA
-    localStorage.setItem("studentInfo", JSON.stringify({
-        name: name,
-        school: school,
-        className: className
-    }));
+    // SAVE DATA TO LOCAL STORAGE
+    const studentInfo = { name, school, className };
+    localStorage.setItem("studentInfo", JSON.stringify(studentInfo));
 
-    // GO TO EXAM
-    window.location.href = "exam.html";
+    // PASS DATA TO EXAM.HTML VIA QUERY STRING
+    const query = `?name=${encodeURIComponent(name)}&school=${encodeURIComponent(school)}&cls=${encodeURIComponent(className)}`;
+    window.location.href = `exam.html${query}`;
 }
 
 </script>
