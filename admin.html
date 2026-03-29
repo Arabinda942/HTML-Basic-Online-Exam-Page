@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Panel</title>
+<title>Admin & Student Panel</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 body { background: linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#fff; padding:30px; }
 h1 { text-align:center; margin-bottom:20px; }
-#login { max-width:300px; margin:50px auto; background: rgba(255,255,255,0.1); padding:25px; border-radius:10px; text-align:center; }
-#login input { width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px; }
-#login button { padding:10px; width:100%; background:#00c6ff; border:none; color:#fff; border-radius:5px; cursor:pointer; }
+#login, #studentView { max-width:300px; margin:50px auto; background: rgba(255,255,255,0.1); padding:25px; border-radius:10px; text-align:center; }
+#login input, #studentView input { width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px; }
+#login button, #studentView button { padding:10px; width:100%; background:#00c6ff; border:none; color:#fff; border-radius:5px; cursor:pointer; }
 .hidden { display:none; }
 #panel { background: rgba(255,255,255,0.08); padding:20px; border-radius:15px; }
 table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff; color:#000; border-radius:10px; overflow:hidden; }
@@ -24,23 +24,27 @@ input[type="number"] { width:70px; padding:5px; }
 </head>
 <body>
 
-<h1>Admin Panel</h1>
+<h1>Admin & Student Panel</h1>
 
+<!-- ADMIN LOGIN -->
 <div id="login">
-<input id="adminId" placeholder="ID">
+<input id="adminId" placeholder="Admin ID">
 <input id="adminPass" type="password" placeholder="Password">
 <button onclick="login()">Login</button>
 <p id="err" style="color:red;"></p>
 </div>
 
+<!-- STUDENT VIEW -->
+<div id="studentView">
+<input id="studentName" placeholder="Enter your name to see your answers">
+<button onclick="viewStudentAnswers()">View Answers</button>
+<p id="studentMsg" style="color:lightgreen;"></p>
+</div>
+
+<!-- ADMIN PANEL -->
 <div id="panel" class="hidden">
-
 <button onclick="logout()">Logout</button>
-
-<button onclick="clearAll()" style="background:red; color:white; margin-bottom:10px;">
-Clear All Records
-</button>
-
+<button onclick="clearAll()" style="background:red; color:white; margin-bottom:10px;">Clear All Records</button>
 <input id="search" placeholder="Search by student name..." oninput="filterTable()">
 
 <table>
@@ -59,9 +63,9 @@ Clear All Records
 </thead>
 <tbody id="data"></tbody>
 </table>
-
 </div>
 
+<!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modal-content">
     <button onclick="closeModal()">Close</button>
@@ -70,9 +74,8 @@ Clear All Records
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-// LOGIN
+// ---------- ADMIN LOGIN ----------
 function login(){
     const user = document.getElementById("adminId").value.trim();
     const pass = document.getElementById("adminPass").value.trim();
@@ -85,7 +88,7 @@ function login(){
     }
 }
 
-// LOAD DATA
+// ---------- LOAD DATA ----------
 function load(){
     const data = JSON.parse(localStorage.getItem("examResults")) || [];
     const table = document.getElementById("data");
@@ -110,7 +113,7 @@ function load(){
     });
 }
 
-// FILTER TABLE
+// ---------- FILTER TABLE ----------
 function filterTable(){
     const term = document.getElementById("search").value.toLowerCase();
     const rows = document.querySelectorAll("#data tr");
@@ -120,7 +123,7 @@ function filterTable(){
     });
 }
 
-// VIEW ANSWERS
+// ---------- VIEW ANSWERS ----------
 function viewAnswers(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
@@ -138,17 +141,40 @@ function viewAnswers(i){
     document.getElementById("modal").style.display = "flex";
 }
 
-// CLOSE MODAL
+// ---------- STUDENT VIEW ----------
+function viewStudentAnswers(){
+    const name = document.getElementById("studentName").value.trim();
+    const data = JSON.parse(localStorage.getItem("examResults")) || [];
+    const student = data.find(s=>s.name.toLowerCase()===name.toLowerCase());
+    const msg = document.getElementById("studentMsg");
+    if(student){
+        let html = `<h2>${student.name}</h2>`;
+        html += `<p><b>Class:</b> ${student.class}</p>`;
+        html += `<p><b>School:</b> ${student.school}</p><hr>`;
+        if(student.answers && student.answers.length){
+            student.answers.forEach(a=>{
+                html += `<p><b>Q${a.q}:</b> ${a.ans}</p>`;
+            });
+        } else html += "<p>No answers found</p>";
+        document.getElementById("answerView").innerHTML = html;
+        document.getElementById("modal").style.display = "flex";
+        msg.textContent="";
+    } else {
+        msg.textContent = "No submission found with this name.";
+    }
+}
+
+// ---------- CLOSE MODAL ----------
 function closeModal(){ document.getElementById("modal").style.display="none"; }
 
-// UPDATE FIELD
+// ---------- UPDATE FIELD ----------
 function updateField(i, field, value){
     let data = JSON.parse(localStorage.getItem("examResults")) || [];
     data[i][field] = value.trim();
     localStorage.setItem("examResults", JSON.stringify(data));
 }
 
-// DELETE
+// ---------- DELETE ----------
 function deleteRecord(i){
     if(confirm("Delete this record?")){
         let data = JSON.parse(localStorage.getItem("examResults")) || [];
@@ -158,7 +184,7 @@ function deleteRecord(i){
     }
 }
 
-// CLEAR ALL
+// ---------- CLEAR ALL ----------
 function clearAll(){
     if(confirm("Delete ALL records?")){
         localStorage.removeItem("examResults");
@@ -166,7 +192,7 @@ function clearAll(){
     }
 }
 
-// PDF DOWNLOAD
+// ---------- PDF DOWNLOAD ----------
 function downloadPDF(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
@@ -178,7 +204,7 @@ function downloadPDF(i){
     pdf.save(`${student.name}_Exam.pdf`);
 }
 
-// WORD DOWNLOAD
+// ---------- WORD DOWNLOAD ----------
 function downloadDOC(i){
     const data = JSON.parse(localStorage.getItem("examResults"));
     const student = data[i];
@@ -191,7 +217,7 @@ function downloadDOC(i){
     link.click();
 }
 
-// LOGOUT
+// ---------- LOGOUT ----------
 function logout(){
     document.getElementById("panel").classList.add("hidden");
     document.getElementById("login").style.display="block";
