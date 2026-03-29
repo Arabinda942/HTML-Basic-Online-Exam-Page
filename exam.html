@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTML Basic Exam</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin:20px; }
-        h1,h2 { text-align:center; }
-        .section { background-color:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
-        .question { margin-bottom:15px; }
-        .timer { font-size:20px; font-weight:bold; color:red; text-align:center; }
-        input[type="text"], textarea { width:100%; padding:5px; margin-top:5px; }
-        button { padding:10px 15px; font-size:16px; }
-    </style>
+<title>Student Exam</title>
+<style>
+body { font-family: Arial, sans-serif; background: #f0f2f5; padding:20px; }
+h1,h2 { text-align:center; }
+form { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.2); }
+input, textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+button { padding:10px 20px; border:none; border-radius:5px; background:#0072ff; color:#fff; cursor:pointer; font-size:16px; }
+button:hover { opacity:0.9; }
+.section { background-color:#fff; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
+.question { margin-bottom:15px; }
+.timer { font-size:20px; font-weight:bold; color:red; text-align:center; }
+</style>
 </head>
 <body>
 
-<h1>HTML Basic Exam</h1>
-
+<h1>Student Exam</h1>
 <div class="timer" id="timer">Time Left: 120:00</div>
 
 <form id="examForm">
+
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="text" id="school" placeholder="School/College" required>
+<input type="text" id="class" placeholder="Class/Semester" required>
+<input type="file" id="file" accept=".pdf,.jpg,.png">
 
 <!-- Section A: MCQs -->
 <div class="section">
@@ -30,63 +36,54 @@
         <input type="radio" name="q1" value="Home Tool Markup Language"> Home Tool Markup Language<br>
         <input type="radio" name="q1" value="Hyperlinks and Text Markup Language"> Hyperlinks and Text Markup Language
     </div>
-
     <div class="question">
         <p>2. What does HTML stand for?</p>
         <input type="radio" name="q2" value="HyperText Markup Language"> HyperText Markup Language<br>
         <input type="radio" name="q2" value="Home Tool Markup Language"> Home Tool Markup Language<br>
         <input type="radio" name="q2" value="Hyperlinks and Text Markup Language"> Hyperlinks and Text Markup Language
     </div>
-
     <div class="question">
         <p>3. Who developed HTML?</p>
         <input type="radio" name="q3" value="Tim Berners-Lee"> Tim Berners-Lee<br>
         <input type="radio" name="q3" value="Brendan Eich"> Brendan Eich<br>
         <input type="radio" name="q3" value="Marc Andreessen"> Marc Andreessen
     </div>
-
     <div class="question">
         <p>4. Which tag is used for paragraphs?</p>
         <input type="radio" name="q4" value="p"> &lt;p&gt;<br>
         <input type="radio" name="q4" value="para"> &lt;para&gt;<br>
         <input type="radio" name="q4" value="text"> &lt;text&gt;
     </div>
-
     <div class="question">
         <p>5. Which tag is used for headings?</p>
         <input type="radio" name="q5" value="h1"> &lt;h1&gt; to &lt;h6&gt;<br>
         <input type="radio" name="q5" value="heading"> &lt;heading&gt;<br>
         <input type="radio" name="q5" value="head"> &lt;head&gt;
     </div>
-
     <div class="question">
         <p>6. Which attribute defines link URL?</p>
         <input type="radio" name="q6" value="href"> href<br>
         <input type="radio" name="q6" value="src"> src<br>
         <input type="radio" name="q6" value="link"> link
     </div>
-
     <div class="question">
         <p>7. What does the &lt;img&gt; tag do?</p>
         <input type="radio" name="q7" value="image"> Displays an image<br>
         <input type="radio" name="q7" value="link"> Creates link<br>
         <input type="radio" name="q7" value="paragraph"> Paragraph
     </div>
-
     <div class="question">
         <p>8. What is the &lt;title&gt; tag for?</p>
         <input type="radio" name="q8" value="Page Title"> Defines page title<br>
         <input type="radio" name="q8" value="Heading"> Heading<br>
         <input type="radio" name="q8" value="Paragraph"> Paragraph
     </div>
-
     <div class="question">
         <p>9. Which tag defines a table row?</p>
         <input type="radio" name="q9" value="tr"> &lt;tr&gt;<br>
         <input type="radio" name="q9" value="td"> &lt;td&gt;<br>
         <input type="radio" name="q9" value="table"> &lt;table&gt;
     </div>
-
     <div class="question">
         <p>10. Which tag defines table header?</p>
         <input type="radio" name="q10" value="th"> &lt;th&gt;<br>
@@ -112,40 +109,46 @@
 <div class="section">
     <h2>Section C: Coding Questions (60 marks)</h2>
     <div class="question">
-        <p>13. Create a basic HTML page with title, heading, paragraph, and one image.</p>
+        <p>13. Write a QBasic program to calculate sum of series 1+2+3+...+n</p>
         <textarea name="q13" rows="5"></textarea>
     </div>
     <div class="question">
-        <p>14. Create a table with 3 columns and 3 rows.</p>
+        <p>14. Write a QBasic program to print even numbers up to n</p>
         <textarea name="q14" rows="5"></textarea>
     </div>
     <div class="question">
-        <p>15. Create a form with Name, Password and Submit button.</p>
+        <p>15. Write a QBasic program to calculate factorial of n</p>
         <textarea name="q15" rows="5"></textarea>
     </div>
     <div class="question">
-        <p>16. Create an unordered list with 5 items.</p>
+        <p>16. Create a basic HTML page with title, heading, paragraph, and one image</p>
         <textarea name="q16" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>17. Create a table with 3 columns and 3 rows</p>
+        <textarea name="q17" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>18. Create a form with Name, Password and Submit button</p>
+        <textarea name="q18" rows="5"></textarea>
+    </div>
+    <div class="question">
+        <p>19. Create an unordered list with 5 items</p>
+        <textarea name="q19" rows="5"></textarea>
     </div>
 </div>
 
-<input type="text" id="studentName" placeholder="Enter Your Name">
-<input type="hidden" name="studentNameField" id="studentNameField">
-
 <div style="text-align:center; margin-top:20px;">
-    <button type="submit" onclick="prepareSubmit(event)">Submit Exam</button>
+    <button type="submit">Submit Exam</button>
 </div>
+<p id="msg" style="color:green;"></p>
 </form>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 <script>
+// Timer
 let totalSeconds = 120*60;
 const timerElement = document.getElementById('timer');
 let countdown = setInterval(updateTimer, 1000);
-
 function updateTimer(){
     let minutes = Math.floor(totalSeconds/60);
     let seconds = totalSeconds%60;
@@ -154,59 +157,37 @@ function updateTimer(){
     if(totalSeconds<0){
         clearInterval(countdown);
         alert("Time's up! Submitting your exam.");
-        prepareSubmit();
+        document.getElementById('examForm').submit();
     }
 }
 
-function prepareSubmit(event){
-    if(event) event.preventDefault();
-    clearInterval(countdown);
-    const name = document.getElementById('studentName').value.trim();
-    if(name===""){
-        alert("Please enter your name!");
-        return false;
-    }
-    document.getElementById('studentNameField').value = name;
+// Form submit
+document.getElementById("examForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const school = document.getElementById("school").value.trim();
+    const cls = document.getElementById("class").value.trim();
+    const file = document.getElementById("file").files[0];
+    const answers = Array.from(document.querySelectorAll("textarea")).map(t=>({q: t.name, ans: t.value.trim()}));
 
-    const answers = {};
-    for(let i=1;i<=16;i++){
-        const q = 'q'+i;
-        const el = document.querySelector(`[name="${q}"]`);
-        if(el){
-            if(el.type==='radio'){
-                const checked = document.querySelector(`[name="${q}"]:checked`);
-                answers[q] = checked ? checked.value : "";
-            } else {
-                answers[q] = el.value || "";
-            }
-        }
+    let fileURL = "";
+    if(file){
+        fileURL = URL.createObjectURL(file);
     }
 
-    // Initialize Firebase
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    const examRef = db.ref("examResults");
-    examRef.push({
+    const data = JSON.parse(localStorage.getItem("examResults")) || [];
+    data.push({
         name: name,
+        school: school,
+        class: cls,
         answers: answers,
+        file: fileURL,
         date: new Date().toLocaleString()
-    }).then(()=>{
-        alert("Exam submitted successfully!");
-        window.location.href="answers.html?studentNameField="+encodeURIComponent(name);
-    }).catch((err)=>{
-        alert("Error submitting exam: "+err.message);
     });
-}
+    localStorage.setItem("examResults", JSON.stringify(data));
+    document.getElementById("msg").textContent = "Exam submitted successfully!";
+    this.reset();
+});
 </script>
 
 </body>
