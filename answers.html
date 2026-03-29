@@ -1,70 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Submitted Answers</title>
+<title>Exam Answers</title>
 <style>
 body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; }
 h1 { text-align:center; margin-bottom:20px; }
-table { width:100%; border-collapse:collapse; background:#fff; }
-th, td { border:1px solid #ccc; padding:10px; text-align:center; }
-th { background:#0072ff; color:#fff; }
-a { color:#0072ff; text-decoration:none; }
-a:hover { text-decoration:underline; }
-#search { margin-bottom:10px; padding:8px; width:50%; border-radius:5px; border:1px solid #ccc; }
+.answer-box { background:#fff; padding:15px; margin-bottom:15px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
+.answer-box h3 { margin-top:0; }
+button { padding:8px 15px; border:none; border-radius:5px; background:#0072ff; color:#fff; cursor:pointer; }
+button:hover { opacity:0.9; }
 </style>
 </head>
 <body>
 
-<h1>Submitted Answers</h1>
+<h1>Your Submitted Answers</h1>
+<div id="answersContainer"></div>
 
-<input id="search" placeholder="Search by student name..." oninput="filterTable()">
-
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>School/College</th>
-<th>Class/Sem</th>
-<th>Answers</th>
-<th>Scan</th>
-<th>Date</th>
-</tr>
-</thead>
-<tbody id="data"></tbody>
-</table>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
 <script>
-function load(){
-    const data = JSON.parse(localStorage.getItem("examResults")) || [];
-    const table = document.getElementById("data");
-    table.innerHTML = "";
-    data.forEach((s,index)=>{
-        let ansHTML = "";
-        if(s.answers && s.answers.length){
-            s.answers.forEach(a=> ansHTML += `Q${a.q}: ${a.ans}<br>`);
-        } else ansHTML = "No answers";
-        table.innerHTML += `<tr>
-            <td>${s.name}</td>
-            <td>${s.school}</td>
-            <td>${s.class}</td>
-            <td>${ansHTML}</td>
-            <td>${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}</td>
-            <td>${s.date}</td>
-        </tr>`;
+// Firebase config (replace with your own)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+function fetchAnswers() {
+    const container = document.getElementById("answersContainer");
+    const name = prompt("Enter your full name to view your answers:");
+    if(!name) return;
+
+    db.ref("examResults").orderByChild("name").equalTo(name).once("value", snapshot => {
+        container.innerHTML = "";
+        if(snapshot.exists()){
+            snapshot.forEach(snap => {
+                const data = snap.val();
+                const div = document.createElement("div");
+                div.className = "answer-box";
+                div.innerHTML = `<h3>${data.name} - ${data.school} (${data.class})</h3>
+                                 <p><strong>Date:</strong> ${data.date}</p>
+                                 ${data.answers.map(a=>`<p><strong>${a.q}:</strong> ${a.ans}</p>`).join('')}
+                                 ${data.file ? `<p><a href="${data.file}" target="_blank">Uploaded File</a></p>` : ''}`;
+                container.appendChild(div);
+            });
+        } else {
+            container.innerHTML = "<p>No submissions found with this name.</p>";
+        }
     });
 }
 
-function filterTable(){
-    const term = document.getElementById("search").value.toLowerCase();
-    const rows = document.querySelectorAll("#data tr");
-    rows.forEach(r=>{
-        const name = r.cells[0].innerText.toLowerCase();
-        r.style.display = name.includes(term) ? "" : "none";
-    });
-}
-
-load();
+fetchAnswers();
 </script>
-
 </body>
 </html>
