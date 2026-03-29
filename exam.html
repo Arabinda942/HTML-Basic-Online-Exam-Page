@@ -144,7 +144,24 @@ button:hover { opacity:0.9; }
 <p id="msg" style="color:green;"></p>
 </form>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 <script>
+// Firebase config (replace with your own project details)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 // Timer
 let totalSeconds = 120*60;
 const timerElement = document.getElementById('timer');
@@ -175,18 +192,21 @@ document.getElementById("examForm").addEventListener("submit", function(e){
         fileURL = URL.createObjectURL(file);
     }
 
-    const data = JSON.parse(localStorage.getItem("examResults")) || [];
-    data.push({
+    // Push exam data to Firebase
+    const newRef = db.ref("examResults").push();
+    newRef.set({
         name: name,
         school: school,
         class: cls,
         answers: answers,
         file: fileURL,
         date: new Date().toLocaleString()
+    }).then(() => {
+        document.getElementById("msg").textContent = "Exam submitted successfully!";
+        this.reset();
+    }).catch(err => {
+        alert("Error submitting exam: "+err);
     });
-    localStorage.setItem("examResults", JSON.stringify(data));
-    document.getElementById("msg").textContent = "Exam submitted successfully!";
-    this.reset();
 });
 </script>
 
