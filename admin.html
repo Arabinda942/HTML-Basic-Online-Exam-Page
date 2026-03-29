@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin & Student Panel</title>
+<title>Admin Panel</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
 body { background: linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#fff; padding:30px; }
 h1 { text-align:center; margin-bottom:20px; }
-#login, #studentView { max-width:300px; margin:50px auto; background: rgba(255,255,255,0.1); padding:25px; border-radius:10px; text-align:center; }
-#login input, #studentView input { width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px; }
-#login button, #studentView button { padding:10px; width:100%; background:#00c6ff; border:none; color:#fff; border-radius:5px; cursor:pointer; }
+#login { max-width:300px; margin:50px auto; background: rgba(255,255,255,0.1); padding:25px; text-align:center; }
+#login input { width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px; }
+#login button { padding:10px; width:100%; background:#00c6ff; border:none; color:#fff; border-radius:5px; cursor:pointer; }
 .hidden { display:none; }
 #panel { background: rgba(255,255,255,0.08); padding:20px; border-radius:15px; }
 table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff; color:#000; border-radius:10px; overflow:hidden; }
@@ -24,7 +24,7 @@ input[type="number"] { width:70px; padding:5px; }
 </head>
 <body>
 
-<h1>Admin & Student Panel</h1>
+<h1>Admin Panel</h1>
 
 <!-- ADMIN LOGIN -->
 <div id="login">
@@ -32,13 +32,6 @@ input[type="number"] { width:70px; padding:5px; }
 <input id="adminPass" type="password" placeholder="Password">
 <button onclick="login()">Login</button>
 <p id="err" style="color:red;"></p>
-</div>
-
-<!-- STUDENT VIEW -->
-<div id="studentView">
-<input id="studentName" placeholder="Enter your name to see your answers">
-<button onclick="viewStudentAnswers()">View Answers</button>
-<p id="studentMsg" style="color:lightgreen;"></p>
 </div>
 
 <!-- ADMIN PANEL -->
@@ -134,34 +127,9 @@ function viewAnswers(i){
         student.answers.forEach(a=>{
             html += `<p><b>Q${a.q}:</b> ${a.ans}</p>`;
         });
-    } else {
-        html += "<p>No answers found</p>";
-    }
+    } else html += "<p>No answers found</p>";
     document.getElementById("answerView").innerHTML = html;
     document.getElementById("modal").style.display = "flex";
-}
-
-// ---------- STUDENT VIEW ----------
-function viewStudentAnswers(){
-    const name = document.getElementById("studentName").value.trim();
-    const data = JSON.parse(localStorage.getItem("examResults")) || [];
-    const student = data.find(s=>s.name.toLowerCase()===name.toLowerCase());
-    const msg = document.getElementById("studentMsg");
-    if(student){
-        let html = `<h2>${student.name}</h2>`;
-        html += `<p><b>Class:</b> ${student.class}</p>`;
-        html += `<p><b>School:</b> ${student.school}</p><hr>`;
-        if(student.answers && student.answers.length){
-            student.answers.forEach(a=>{
-                html += `<p><b>Q${a.q}:</b> ${a.ans}</p>`;
-            });
-        } else html += "<p>No answers found</p>";
-        document.getElementById("answerView").innerHTML = html;
-        document.getElementById("modal").style.display = "flex";
-        msg.textContent="";
-    } else {
-        msg.textContent = "No submission found with this name.";
-    }
 }
 
 // ---------- CLOSE MODAL ----------
