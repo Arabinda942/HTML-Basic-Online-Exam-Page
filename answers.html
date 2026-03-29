@@ -1,64 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Exam Answers</title>
+<title>View Exam Answers</title>
 <style>
-body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; }
-h1 { text-align:center; margin-bottom:20px; }
-.answer-box { background:#fff; padding:15px; margin-bottom:15px; border-radius:8px; box-shadow:1px 1px 5px #ccc; }
-.answer-box h3 { margin-top:0; }
-button { padding:8px 15px; border:none; border-radius:5px; background:#0072ff; color:#fff; cursor:pointer; }
-button:hover { opacity:0.9; }
+body { font-family: Arial, sans-serif; padding:20px; background:#f0f2f5; }
+h1 { text-align:center; }
+table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff; color:#000; border-radius:10px; overflow:hidden; }
+th, td { padding:10px; border:1px solid #ccc; text-align:center; }
+th { background:#0072ff; color:#fff; }
+button { padding:5px 10px; border:none; border-radius:5px; cursor:pointer; }
 </style>
 </head>
 <body>
 
-<h1>Your Submitted Answers</h1>
-<div id="answersContainer"></div>
+<h1>Submitted Exam Answers</h1>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>School</th>
+<th>Class</th>
+<th>Date</th>
+<th>View Answers</th>
+<th>File</th>
+</tr>
+</thead>
+<tbody id="answersTable"></tbody>
+</table>
+
+<div id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center;">
+<div style="background:#fff; color:#000; padding:20px; width:90%; max-width:800px; max-height:90%; overflow:auto; border-radius:10px;">
+<button onclick="closeModal()">Close</button>
+<div id="answerView"></div>
+</div>
+</div>
 
 <script>
-// Firebase config (replace with your own)
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-function fetchAnswers() {
-    const container = document.getElementById("answersContainer");
-    const name = prompt("Enter your full name to view your answers:");
-    if(!name) return;
-
-    db.ref("examResults").orderByChild("name").equalTo(name).once("value", snapshot => {
-        container.innerHTML = "";
-        if(snapshot.exists()){
-            snapshot.forEach(snap => {
-                const data = snap.val();
-                const div = document.createElement("div");
-                div.className = "answer-box";
-                div.innerHTML = `<h3>${data.name} - ${data.school} (${data.class})</h3>
-                                 <p><strong>Date:</strong> ${data.date}</p>
-                                 ${data.answers.map(a=>`<p><strong>${a.q}:</strong> ${a.ans}</p>`).join('')}
-                                 ${data.file ? `<p><a href="${data.file}" target="_blank">Uploaded File</a></p>` : ''}`;
-                container.appendChild(div);
-            });
-        } else {
-            container.innerHTML = "<p>No submissions found with this name.</p>";
-        }
+function loadAnswers(){
+    const data = JSON.parse(localStorage.getItem("examResults")) || [];
+    const tbody = document.getElementById("answersTable");
+    tbody.innerHTML = "";
+    data.forEach((s,i)=>{
+        tbody.innerHTML += `<tr>
+            <td>${s.name}</td>
+            <td>${s.school}</td>
+            <td>${s.class}</td>
+            <td>${s.date}</td>
+            <td><button onclick="viewAnswers(${i})">View</button></td>
+            <td>${s.file ? `<a href="${s.file}" target="_blank">Open</a>` : "No File"}</td>
+        </tr>`;
     });
 }
 
-fetchAnswers();
+function viewAnswers(i){
+    const data = JSON.parse(localStorage.getItem("examResults")) || [];
+    const s = data[i];
+    let html = `<h2>${s.name}</h2><p><b>Class:</b> ${s.class}</p><p><b>School:</b> ${s.school}</p><hr>`;
+    s.answers.forEach(a=>{
+        html += `<p><b>${a.q}:</b> ${a.ans}</p>`;
+    });
+    document.getElementById("answerView").innerHTML = html;
+    document.getElementById("modal").style.display="flex";
+}
+
+function closeModal(){ document.getElementById("modal").style.display="none"; }
+
+window.onload = loadAnswers;
 </script>
+
 </body>
 </html>
